@@ -12,20 +12,21 @@ export default function Button({
   icon,
   size,
   width,
+  fontSize,
 }) {
   if (type === 'icon') {
     return <Icon onPress={onPress} color={color} icon={icon} size={size} />;
   }
+  if (type === 'link') {
+    return (
+      <Text style={styles.link(color)} onPress={onPress}>
+        {title}
+      </Text>
+    );
+  }
   return (
-    <TouchableOpacity
-      style={{
-        backgroundColor: color,
-        paddingVertical: 10,
-        borderRadius: 10,
-        width: width,
-      }}
-      onPress={onPress}>
-      <Text style={styles.text(color)}>{title}</Text>
+    <TouchableOpacity style={styles.background(color, width)} onPress={onPress}>
+      <Text style={styles.text(color, type, fontSize)}>{title}</Text>
     </TouchableOpacity>
   );
 }
@@ -35,5 +36,16 @@ const styles = StyleSheet.create({
     color: color === colors.darkBlue ? colors.white : colors.black,
     textAlign: 'center',
     fontSize: 16,
+  }),
+  background: (color, width) => ({
+    backgroundColor: color,
+    paddingVertical: 10,
+    borderRadius: 10,
+    width: width,
+  }),
+  link: color => ({
+    textDecorationLine: 'underline',
+    fontWeight: 'bold',
+    color: color,
   }),
 });

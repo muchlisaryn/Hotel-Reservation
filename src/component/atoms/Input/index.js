@@ -9,6 +9,7 @@ export default function Input({
   type,
   backgroundColor,
   value,
+  keyboardType,
 }) {
   const [showPassword, setShowPassword] = useState(
     type === 'password' ? true : false,
@@ -34,9 +35,21 @@ export default function Input({
         secureTextEntry={showPassword}
         placeholderTextColor={colors.darkGrey}
         value={value}
+        keyboardType={keyboardType}
       />
       {type === 'password' ? (
-        <Ionicons name={iconEye} style={styles.icon(type)} onPress={ShowPw} />
+        <>
+          {value !== '' ? (
+            <Ionicons
+              name={iconEye}
+              style={styles.icon(type)}
+              onPress={ShowPw}
+            />
+          ) : (
+            <></>
+          )}
+          <Ionicons name="lock-closed-outline" style={styles.iconPW} />
+        </>
       ) : (
         <></>
       )}
@@ -70,7 +83,12 @@ const styles = StyleSheet.create({
     backgroundColor: backgroundColor ? backgroundColor : colors.white,
     paddingRight: type === 'password' || type === 'search' ? 40 : 20,
     paddingLeft:
-      type === 'user' || type === 'telephone' || type === 'email' ? 40 : 20,
+      type === 'user' ||
+      type === 'telephone' ||
+      type === 'email' ||
+      type === 'password'
+        ? 40
+        : 20,
     color: colors.black,
   }),
   icon: type => ({
@@ -88,4 +106,11 @@ const styles = StyleSheet.create({
         ? colors.darkGrey
         : colors.black,
   }),
+  iconPW: {
+    right: null,
+    position: 'absolute',
+    fontSize: 20,
+    padding: 14,
+    top: 0,
+  },
 });

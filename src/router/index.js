@@ -16,6 +16,8 @@ import {
   Rooms,
   DetailRoom,
   BookingSuccess,
+  SignUp,
+  Payment,
 } from '../screen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -51,7 +53,7 @@ const MainApp = () => {
         }}
       />
       <Tab.Screen
-        name="Receipt"
+        name="Transaction"
         component={Receipt}
         options={{
           headerShown: false,
@@ -141,6 +143,16 @@ const Router = () => {
       <Stack.Screen
         name="BookingSuccess"
         component={BookingSuccess}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Payment"
+        component={Payment}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

@@ -95,6 +95,7 @@ export default function Profile({navigation}) {
                   dataEditable={true}
                   data={user?.phone}
                   prop="phone"
+                  keyboardType="numeric"
                 />
               </View>
             </>

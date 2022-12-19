@@ -19,6 +19,7 @@ export default function EditModal({
   onChangeText,
   onPressEdit,
   isPassword,
+  keyboardType,
 }) {
   const [showPassword, setShowPassword] = useState(true);
   const [iconEye, setIconEye] = useState('eye-off-outline');
@@ -57,6 +58,7 @@ export default function EditModal({
               style={styles.textInput}
               value={data}
               onChangeText={onChangeText}
+              keyboardType={keyboardType}
             />
           )}
 

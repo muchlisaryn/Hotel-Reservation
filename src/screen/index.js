@@ -13,6 +13,8 @@ import Review from './Review';
 import Rooms from './Rooms';
 import DetailRoom from './DetailRoom';
 import BookingSuccess from './BookingSuccess';
+import Payment from './Payment';
+import SignUp from './SignUp';
 
 export {
   Sign,
@@ -30,4 +32,6 @@ export {
   Rooms,
   DetailRoom,
   BookingSuccess,
+  Payment,
+  SignUp,
 };

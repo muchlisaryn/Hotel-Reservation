@@ -7,6 +7,7 @@ import {setUser} from '../../features/loginSlice';
 import axios from 'axios';
 import {colors} from '../../utils';
 import Header from '../../component/molecules/Header';
+import {Gap} from '../../component/atoms';
 
 export default function Sign({navigation}) {
   const dispatch = useDispatch();
@@ -59,10 +60,11 @@ export default function Sign({navigation}) {
         <Text style={styles.text}>Please sign to access application</Text>
         <View style={styles.Input}>
           <Input
+            type="user"
             placeholder="Username"
             onChangeText={value => setUsername(value)}
           />
-          <View style={{height: 10}}></View>
+          <Gap height={10} />
           <View>
             <Input
               type="password"
@@ -72,6 +74,22 @@ export default function Sign({navigation}) {
           </View>
         </View>
         <Button title="Login" onPress={Login} color={colors.yellow} />
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 10,
+            justifyContent: 'center',
+          }}>
+          <Text style={{marginRight: 5, color: colors.white}}>
+            Belum Punya akun?
+          </Text>
+          <Button
+            title="Daftar"
+            type="link"
+            color={colors.yellow}
+            onPress={() => navigation.navigate('SignUp')}
+          />
+        </View>
       </View>
     </View>
   );
@@ -89,7 +107,7 @@ const styles = StyleSheet.create({
   },
   Input: {
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 30,
   },
   title: {
     fontSize: 25,

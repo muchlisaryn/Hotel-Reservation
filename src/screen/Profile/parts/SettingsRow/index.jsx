@@ -19,6 +19,7 @@ export default function SettingsRow({
   prop,
   data,
   dataEditable,
+  keyboardType,
 }) {
   const dispatch = useDispatch();
 
@@ -57,6 +58,7 @@ export default function SettingsRow({
             data={inputTextValue}
             onChangeText={setInputTextValue}
             isPassword={isPassword}
+            keyboardType={keyboardType}
           />
         </>
       )}
