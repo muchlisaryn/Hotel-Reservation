@@ -10,6 +10,7 @@ import React from 'react';
 import {Header} from '../../component/molecules';
 import {colors, formatIDR} from '../../utils';
 import {Button} from '../../component/atoms';
+import {useSelector} from 'react-redux';
 
 export default function DetailRoom({route, navigation}) {
   const {
@@ -22,10 +23,10 @@ export default function DetailRoom({route, navigation}) {
     checkIn,
     checkOut,
     detail_room,
-    mainImage
+    mainImage,
   } = route.params;
+  const user = useSelector(state => state.login.user);
 
-  console.log(detail_room);
   return (
     <SafeAreaView style={styles.page}>
       <ScrollView>
@@ -94,7 +95,9 @@ export default function DetailRoom({route, navigation}) {
           </View>
           <View style={styles.container}>
             <Text style={styles.title}>Description</Text>
-            <Text style={{ color: colors.darkGrey }}>{detail_room?.description}</Text>
+            <Text style={{color: colors.darkGrey}}>
+              {detail_room?.description}
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -131,19 +134,21 @@ export default function DetailRoom({route, navigation}) {
           color={colors.yellow}
           size={10}
           width={100}
-          onPress={() =>
-            navigation.navigate('Booking', {
-              price: price,
-              bed_type: bed_type,
-              room: room,
-              person: person,
-              checkIn: checkIn,
-              checkOut: checkOut,
-              name_room: name_room,
-              image: image[1]?.url_original,
-              mainImage
-            })
-          }
+          onPress={() => {
+            user
+              ? navigation.navigate('Booking', {
+                  price: price,
+                  bed_type: bed_type,
+                  room: room,
+                  person: person,
+                  checkIn: checkIn,
+                  checkOut: checkOut,
+                  name_room: name_room,
+                  image: image[1]?.url_original,
+                  mainImage,
+                })
+              : navigation.navigate('Sign');
+          }}
         />
       </View>
     </SafeAreaView>

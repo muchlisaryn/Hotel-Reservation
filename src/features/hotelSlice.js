@@ -42,7 +42,7 @@ export const fetchHotels = createAsyncThunk(
         },
         headers,
       });
-      console.log(process.env.REACT_APP_API_KEY);
+
       return [responseHotels.data.result, responseHotels.data.search_id];
     } catch (e) {
       throw e;

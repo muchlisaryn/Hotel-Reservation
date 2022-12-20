@@ -13,6 +13,7 @@ export default function Button({
   size,
   width,
   fontSize,
+  style,
 }) {
   if (type === 'icon') {
     return <Icon onPress={onPress} color={color} icon={icon} size={size} />;

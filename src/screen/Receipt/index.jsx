@@ -25,7 +25,7 @@ export default function Receipt({navigation}) {
 
   if (user) {
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
         <View style={{backgroundColor: colors.darkBlue, padding: 20}}>
           <Text
             style={{
@@ -34,13 +34,13 @@ export default function Receipt({navigation}) {
               fontWeight: '700',
               textAlign: 'center',
             }}>
-            Booking History
+            Riwayat Transaksi
           </Text>
         </View>
         <ScrollView>
-          <View style={{margin: 20, marginBottom: 60}}>
+          <View style={styles.page}>
             {bookHistories ? (
-              <View style={{marginTop: 15}}>
+              <View style={{padding: 20}}>
                 {bookHistories?.map(item => (
                   <BookHistoryCard
                     key={item?.book_id}
@@ -61,15 +61,14 @@ export default function Receipt({navigation}) {
                 ))}
               </View>
             ) : (
-              <View style={{marginTop: 50}}>
-                <Text
-                  style={{
-                    color: colors.black,
-                    fontSize: 18,
-                    fontStyle: 'italic',
-                    textAlign: 'center',
-                  }}>
-                  Empty~
+              <View
+                style={{
+                  padding: 20,
+                }}>
+                <Text style={styles.title}>Belum Ada Riwayat Transaksi</Text>
+                <Text style={styles.description}>
+                  kamu belum melakukan transaksi, riwayat tarnsaksi akan muncul
+                  disini
                 </Text>
               </View>
             )}
@@ -99,6 +98,22 @@ export default function Receipt({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  page: {
+    justifyContent: 'center',
+    flex: 1,
+    marginBottom: 60,
+  },
+  title: {
+    color: colors.black,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  description: {
+    textAlign: 'center',
+    fontSize: 13,
+    marginTop: 8,
+  },
   profileBox: {
     backgroundColor: colors.white,
     borderRadius: 10,

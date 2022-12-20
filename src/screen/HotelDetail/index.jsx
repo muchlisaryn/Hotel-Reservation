@@ -188,18 +188,16 @@ export default function DetailHotel({route, navigation}) {
               </Text>
             </View>
             <Button
-              onPress={() => {
-                user
-                  ? navigation.navigate('Rooms', {
-                      hotel_id: hotel_id,
-                      checkOut: checkOut,
-                      checkIn: checkIn,
-                      guests: guests,
-                      rooms: rooms,
-                      image,
-                    })
-                  : navigation.navigate('Sign');
-              }}
+              onPress={() =>
+                navigation.navigate('Rooms', {
+                  hotel_id: hotel_id,
+                  checkOut: checkOut,
+                  checkIn: checkIn,
+                  guests: guests,
+                  rooms: rooms,
+                  image,
+                })
+              }
               title="Pilih Kamar"
               color={colors.yellow}
               size={10}

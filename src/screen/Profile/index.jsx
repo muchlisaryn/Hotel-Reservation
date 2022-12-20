@@ -24,11 +24,21 @@ export default function Profile({navigation}) {
 
   return (
     <SafeAreaView style={styles.page}>
+      <View style={styles.header}>
+        <Text
+          style={{
+            color: colors.white,
+            fontSize: 18,
+            fontWeight: '700',
+            textAlign: 'center',
+          }}>
+          {user ? `Wellcome, ${user?.firstName}` : 'Profile'}
+        </Text>
+      </View>
       <ScrollView>
         <View style={styles.container}>
           {user ? (
             <>
-              <Text style={styles.header}>Profile</Text>
               <View style={styles.profileUser}>
                 <Image source={{uri: user?.image}} style={styles.image} />
                 <View style={{marginTop: 10}}>
@@ -106,7 +116,7 @@ export default function Profile({navigation}) {
                 My Profile
               </Text>
               <Text style={styles.text(colors.black)}>
-                Sign in to see your account settings
+                Please Sign in to see your account settings
               </Text>
             </View>
           )}
@@ -165,8 +175,9 @@ const styles = StyleSheet.create({
     color: color,
   }),
   header: {
-    color: colors.black,
-    fontSize: 18,
+    justifyContent: 'center',
+    backgroundColor: colors.darkBlue,
+    padding: 20,
   },
   container: {
     padding: 20,

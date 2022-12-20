@@ -52,7 +52,7 @@ export default function Favorite({navigation}) {
           </Text>
         </View>
         <ScrollView>
-          <View style={{margin: 20}}>
+          <View style={styles.page}>
             {favorites ? (
               <View style={{marginTop: 15}}>
                 {favorites?.map(item => (
@@ -81,15 +81,14 @@ export default function Favorite({navigation}) {
                 ))}
               </View>
             ) : (
-              <View style={{marginTop: 50}}>
-                <Text
-                  style={{
-                    color: colors.black,
-                    fontSize: 18,
-                    fontStyle: 'italic',
-                    textAlign: 'center',
-                  }}>
-                  No favorite hotel yet~
+              <View
+                style={{
+                  padding: 20,
+                }}>
+                <Text style={styles.title}>Belum Ada Hotel Favorite</Text>
+                <Text style={styles.description}>
+                  kamu belum memilih hotel favorite, hotel favorite akan muncul
+                  disini
                 </Text>
               </View>
             )}
@@ -119,6 +118,22 @@ export default function Favorite({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  page: {
+    justifyContent: 'center',
+    flex: 1,
+    marginBottom: 60,
+  },
+  title: {
+    color: colors.black,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  description: {
+    textAlign: 'center',
+    fontSize: 13,
+    marginTop: 8,
+  },
   profileBox: {
     backgroundColor: colors.white,
     borderRadius: 10,

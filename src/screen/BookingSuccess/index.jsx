@@ -19,7 +19,7 @@ export default function BookingSuccess({route, navigation}) {
       </View>
       <Button
         title="Back to home"
-        onPress={() => navigation.navigate('Home')}
+        onPress={() => navigation.navigate('Payment')}
         color={colors.yellow}
       />
     </View>
