@@ -7,9 +7,26 @@ import {Header} from '../../component/molecules';
 import {colors} from '../../utils';
 import {ScrollView} from 'react-native-gesture-handler';
 import {UploadPhoto} from '../../assets/img';
+import {useDispatch} from 'react-redux';
+import {addBookHistory} from '../../features/bookHistorySlice';
 
-export default function Payment({navigation}) {
+export default function Payment({route, navigation}) {
+  const {
+    username,
+    mainImage,
+    hotel_name,
+    book_id,
+    stay_length,
+    checkIn,
+    checkOut,
+    person,
+    room,
+    name_room,
+    price,
+    transaction_time,
+  } = route.params;
   const [photo, setPhoto] = useState(null);
+  const dispatch = useDispatch();
 
   const handleChoosePhoto = () => {
     launchImageLibrary({noData: true}, response => {
@@ -23,7 +40,7 @@ export default function Payment({navigation}) {
   console.log(photo);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <View
         style={{
           backgroundColor: colors.darkBlue,
@@ -33,47 +50,103 @@ export default function Payment({navigation}) {
         <Header title="Payment" onPress={() => navigation.goBack()} />
       </View>
       <ScrollView>
-        <View style={styles.box}>
-          <Image
-            source={{
-              uri: 'https://buatlogoonline.com/wp-content/uploads/2022/10/Logo-Bank-BCA-1.png',
-            }}
-            style={{width: 50, height: 50}}
-          />
-          <Text style={styles.price}>Transfer Manual</Text>
-        </View>
+        <View style={{paddingHorizontal: 20}}>
+          <View style={styles.box}>
+            <Image
+              source={{
+                uri: 'https://buatlogoonline.com/wp-content/uploads/2022/10/Logo-Bank-BCA-1.png',
+              }}
+              style={{width: 50, height: 50}}
+            />
+            <Text style={{fontWeight: 'normal', color: colors.black}}>
+              Transfer Manual
+            </Text>
+          </View>
 
-        <View>
-          <Text>Transfer pembayaran ke nomor rekening :</Text>
-          <Text>023 702 02821412</Text>
-        </View>
-        <View style={styles.box}>
-          <Text style={styles.title}>Total Payment</Text>
-          <Text style={styles.price}>Rp 300.000</Text>
-        </View>
+          <View
+            style={{
+              alignItems: 'center',
+              borderBottomColor: colors.darkGrey,
+              borderBottomWidth: 1,
+              padding: 15,
+            }}>
+            <Text style={{color: colors.black}}>Jumlah yang harus dibayar</Text>
+            <Text style={styles.price}>{price}</Text>
+          </View>
 
-        <View style={{alignItems: 'center'}}>
-          <Pressable onPress={handleChoosePhoto}>
+          <View style={{alignItems: 'center', marginBottom: 40}}>
+            <Image
+              source={{
+                uri: 'https://buatlogoonline.com/wp-content/uploads/2022/10/Logo-Bank-BCA-1.png',
+              }}
+              style={{width: 50, height: 50}}
+            />
+            <View style={{alignItems: 'center'}}>
+              <Text>a/n Hotel.com</Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  color: colors.darkGrey,
+                }}>
+                023 702 02821412
+              </Text>
+            </View>
+          </View>
+
+          <View style={{alignItems: 'center'}}>
+            <Pressable onPress={handleChoosePhoto}>
+              {photo?.assets ? (
+                <Image
+                  source={{uri: photo?.assets[0]?.uri}}
+                  style={styles.imagePayment(photo)}
+                />
+              ) : (
+                <Image
+                  source={UploadPhoto}
+                  style={styles.imagePayment(photo)}
+                />
+              )}
+            </Pressable>
+          </View>
+          <View style={{marginVertical: 20}}>
             {photo?.assets ? (
-              <Image
-                source={{uri: photo?.assets[0]?.uri}}
-                style={styles.imagePayment}
+              <Button
+                title="Bayar"
+                color={colors.darkBlue}
+                onPress={() => {
+                  dispatch(
+                    addBookHistory({
+                      username,
+                      data: {
+                        mainImage,
+                        hotel_name,
+                        book_id,
+                        stay_length,
+                        checkIn,
+                        checkOut,
+                        person,
+                        room,
+                        name_room,
+                        price,
+                        transaction_time,
+                        photoPayment: photo,
+                      },
+                    }),
+                  );
+                  navigation.navigate('BookingSuccess', {
+                    transaction_time,
+                  });
+                }}
               />
             ) : (
-              <Image source={UploadPhoto} style={styles.imagePayment} />
+              <Button
+                title="Upload Bukti Pembayaran"
+                onPress={handleChoosePhoto}
+                color={colors.darkBlue}
+              />
             )}
-          </Pressable>
-        </View>
-        <View style={{padding: 20}}>
-          {photo?.assets ? (
-            <Button title="Payment" color={colors.darkBlue} />
-          ) : (
-            <Button
-              title="Upload Photo"
-              onPress={handleChoosePhoto}
-              color={colors.darkBlue}
-            />
-          )}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -82,26 +155,29 @@ export default function Payment({navigation}) {
 
 const styles = StyleSheet.create({
   price: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: colors.black,
+    color: colors.darkBlue,
+    marginTop: 5,
   },
   box: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: colors.white,
-    padding: 20,
-    marginBottom: 20,
     alignItems: 'center',
+    borderBottomColor: colors.darkGrey,
+    borderBottomWidth: 1,
+    paddingVertical: 15,
   },
   title: {
     color: colors.darkBlue,
   },
-  imagePayment: {
+  imagePayment: photo => ({
     width: 300,
     height: 300,
     borderRadius: 10,
-  },
+    borderColor: photo?.assets ? null : colors.darkGrey,
+    borderWidth: 1,
+  }),
   button: {
     margin: 15,
     borderRadius: 10,

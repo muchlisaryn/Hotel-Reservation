@@ -11,7 +11,6 @@ import React, {useState} from 'react';
 import {Button, Input} from '../../component/atoms';
 import {colors, formatIDR} from '../../utils';
 import {Header} from '../../component/molecules';
-import {addBookHistory} from '../../features/bookHistorySlice';
 
 function makeid(length) {
   var result = '';
@@ -45,7 +44,6 @@ const lengthOfDay = (date1, date2) => {
 };
 
 export default function Booking({route, navigation}) {
-  const dispatch = useDispatch();
   const book_id = makeid(12);
   const {
     price,
@@ -148,28 +146,21 @@ export default function Booking({route, navigation}) {
             </View>
           </View>
           <Button
-            title="Booking"
+            title="Continue"
             color={colors.darkBlue}
             onPress={() => {
-              dispatch(
-                addBookHistory({
-                  username: user.username,
-                  data: {
-                    mainImage,
-                    hotel_name,
-                    book_id,
-                    stay_length: lengthOfDay(checkIn, checkOut),
-                    checkIn,
-                    checkOut,
-                    person,
-                    room,
-                    name_room,
-                    price: formatIDR.format(price * room),
-                    transaction_time: convertDate(date),
-                  },
-                }),
-              );
-              navigation.navigate('BookingSuccess', {
+              navigation.navigate('Payment', {
+                username: user?.username,
+                mainImage,
+                hotel_name,
+                book_id,
+                stay_length: lengthOfDay(checkIn, checkOut),
+                checkIn,
+                checkOut,
+                person,
+                room,
+                name_room,
+                price: formatIDR.format(price * room),
                 transaction_time: convertDate(date),
               });
             }}
