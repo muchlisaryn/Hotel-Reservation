@@ -11,9 +11,8 @@ import {
 } from 'react-native';
 import {colors} from '../../utils';
 import {useSelector} from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import BookHistoryCard from '../../component/molecules/BookHistoryCard';
-import {Button} from '../../component/atoms';
+import {PageUndifined} from '../../component/molecules';
 
 export default function Receipt({navigation}) {
   const user = useSelector(state => state?.login?.user);
@@ -78,20 +77,13 @@ export default function Receipt({navigation}) {
     );
   } else {
     return (
-      <SafeAreaView style={{flex: 1, margin: 20}}>
-        <View style={[styles.profileBox, {marginBottom: 10}]}>
-          <Text style={[styles.textHeader(colors.black), {marginBottom: 5}]}>
-            Booking History
-          </Text>
-          <Text style={styles.text(colors.black)}>
-            Sign in to see your booking history
-          </Text>
-        </View>
-        <Button
-          title="Sign in"
-          color={colors.darkBlue}
-          onPress={() => navigation.navigate('Sign')}
-        />
+      <SafeAreaView
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          backgroundColor: colors.white,
+        }}>
+        <PageUndifined type="not login" namePage="Booking History" />
       </SafeAreaView>
     );
   }

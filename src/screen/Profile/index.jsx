@@ -13,6 +13,7 @@ import {colors} from '../../utils';
 import {removeLogin} from '../../features/loginSlice';
 import LogoutModal from './parts/LogoutModal';
 import {useState} from 'react';
+import {PageUndifined} from '../../component/molecules';
 
 export default function Profile({navigation}) {
   const dispatch = useDispatch();
@@ -110,15 +111,14 @@ export default function Profile({navigation}) {
               </View>
             </>
           ) : (
-            <View style={[styles.profileBox, {marginBottom: 10}]}>
-              <Text
-                style={[styles.textHeader(colors.black), {marginBottom: 5}]}>
-                My Profile
-              </Text>
-              <Text style={styles.text(colors.black)}>
-                Please Sign in to see your account settings
-              </Text>
-            </View>
+            <SafeAreaView
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                backgroundColor: colors.white,
+              }}>
+              <PageUndifined type="not login" namePage="Profile" />
+            </SafeAreaView>
           )}
 
           <Button
@@ -131,7 +131,7 @@ export default function Profile({navigation}) {
                     navigation.navigate('Sign');
                   }
             }
-            title={user ? 'Sign out' : 'Sign in'}
+            title={user ? 'Logout' : 'Login'}
             color={colors.darkBlue}
           />
           <LogoutModal
@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
   },
   page: {
     flex: 1,
+    backgroundColor: colors.white,
   },
   totalActivity: {
     fontWeight: 'bold',

@@ -8,6 +8,7 @@ import axios from 'axios';
 import {colors} from '../../utils';
 import Header from '../../component/molecules/Header';
 import {Gap} from '../../component/atoms';
+import {Logo} from '../../assets/img';
 
 export default function Sign({navigation}) {
   const dispatch = useDispatch();
@@ -54,21 +55,26 @@ export default function Sign({navigation}) {
 
   return (
     <View style={styles.page}>
-      <Header title="Sign in" onPress={() => navigation.goBack()} />
+      <Header title="Login" onPress={() => navigation.goBack()} />
       <View style={styles.content}>
-        <Text style={styles.title}>WELLCOME</Text>
-        <Text style={styles.text}>Please sign to access application</Text>
+        <View
+          style={{
+            alignItems: 'center',
+          }}>
+          <Logo />
+        </View>
+        <Text style={styles.text}>Masukan Username dan Password Anda</Text>
         <View style={styles.Input}>
           <Input
             type="user"
-            placeholder="Username"
+            placeholder="Masukan Username"
             onChangeText={value => setUsername(value)}
           />
           <Gap height={10} />
           <View>
             <Input
               type="password"
-              placeholder="Password"
+              placeholder="Masukan Password"
               onChangeText={value => setPassword(value)}
             />
           </View>

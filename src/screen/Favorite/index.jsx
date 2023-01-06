@@ -12,6 +12,7 @@ import {
 import {Button} from '../../component/atoms';
 import HotelCard from '../../component/molecules/HotelCard';
 import {colors} from '../../utils';
+import {PageUndifined} from '../../component/molecules';
 
 const formatDate = date => {
   let month = '' + (date.getMonth() + 1);
@@ -98,20 +99,13 @@ export default function Favorite({navigation}) {
     );
   } else {
     return (
-      <SafeAreaView style={{flex: 1, margin: 20}}>
-        <View style={[styles.profileBox, {marginBottom: 10}]}>
-          <Text style={[styles.textHeader(colors.black), {marginBottom: 5}]}>
-            Favorite Hotel
-          </Text>
-          <Text style={styles.text(colors.black)}>
-            Sign in to see your favorite hotels
-          </Text>
-        </View>
-        <Button
-          title="Sign in"
-          color={colors.darkBlue}
-          onPress={() => navigation.navigate('Sign')}
-        />
+      <SafeAreaView
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          backgroundColor: colors.white,
+        }}>
+        <PageUndifined type="not login" namePage="Favorite" />
       </SafeAreaView>
     );
   }
@@ -122,6 +116,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     marginBottom: 60,
+    margin: 10,
   },
   title: {
     color: colors.black,

@@ -1,6 +1,6 @@
 import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Destination from './parts/Destination';
-import {colors, DataPopular, DataTop} from '../../utils';
+import {colors, DataPopular, DataTop, shortMonth} from '../../utils';
 import {Button, Input} from '../../component/atoms';
 import Header from '../../component/molecules/Header';
 import {useState, useEffect} from 'react';
@@ -8,7 +8,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import InputModal from './parts/InputModal';
 
 const maxDate = new Date();
-
 maxDate.setMonth(maxDate.getMonth() + 1);
 
 const formatDate = date => {
@@ -26,7 +25,6 @@ const formatDate = date => {
   }
   return [year, month, day].join('-');
 };
-
 export default function Home({navigation}) {
   const [input, setInput] = useState('');
   const [inputCheckIn, setInputCheckIn] = useState(null);
@@ -35,6 +33,8 @@ export default function Home({navigation}) {
   const [minimumDate, setMinimumDate] = useState(date);
   const [checkIn, setCheckIn] = useState('Check in');
   const [checkOut, setCheckOut] = useState('Check Out');
+  const [dateCheckIn, setDateCheckIn] = useState('');
+  const [dateCheckOut, setDateCheckOut] = useState('');
   const [openCheckin, setOpenCheckin] = useState(false);
   const [openCheckout, setOpenCheckout] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -55,9 +55,19 @@ export default function Home({navigation}) {
     }
   }, [guest, room]);
 
+  useEffect(() => {
+    if (inputCheckIn > inputCheckOut) {
+      setCheckOut('Check Out');
+    }
+  }, []);
+
   const searchButton = () => {
     if (input !== '' && inputCheckIn && inputCheckOut) {
       navigation.navigate('SearchResult', {
+        dateCheckIn,
+        dateCheckOut,
+        formatCheckIn: checkIn,
+        formatCheckOut: checkOut,
         location: input,
         checkIn: inputCheckIn,
         checkOut: inputCheckOut,
@@ -111,6 +121,9 @@ export default function Home({navigation}) {
                         setOpenCheckin(false);
                         setInputCheckIn(formatDate(selectedDate));
                         setCheckIn(selectedDate.toLocaleDateString('pt-PT'));
+                        const date = String(selectedDate.getDate());
+                        const month = shortMonth.format(selectedDate);
+                        setDateCheckIn(date + ' ' + month);
                         setMinimumDate(
                           new Date(
                             selectedDate.setDate(selectedDate.getDate() + 1),
@@ -142,6 +155,9 @@ export default function Home({navigation}) {
                         setOpenCheckout(false);
                         setInputCheckOut(formatDate(selectedDate));
                         setCheckOut(selectedDate.toLocaleDateString('pt-PT'));
+                        const month = shortMonth.format(new Date(selectedDate));
+                        const day = String(selectedDate.getDate());
+                        setDateCheckOut(day + ' ' + month);
                       } else {
                         setOpenCheckout(false);
                       }

@@ -5,21 +5,81 @@ import {colors} from '../../utils';
 import HotelCard from '../../component/molecules/HotelCard';
 import {Button} from '../../component/atoms';
 import {fetchHotels} from '../../features/hotelSlice';
+import ModalEdit from './parts/Modal';
 
 export default function SearchResult({route, navigation}) {
   const dispatch = useDispatch();
   const hotels = useSelector(state => state.hotel.hotels);
   const isPending = useSelector(state => state.hotel.isPending);
 
-  const {location, checkIn, checkOut, guests, rooms} = route.params;
+  const {
+    location,
+    checkIn,
+    checkOut,
+    guests,
+    rooms,
+    formatCheckIn,
+    formatCheckOut,
+    dateCheckIn,
+    dateCheckOut,
+  } = route.params;
+
+  const [modalVisible, setModalVisible] = useState(false);
+
   const [newCheckIn, setNewCheckIn] = useState(checkIn);
   const [newCheckOut, setNewCheckOut] = useState(checkOut);
   const [newGuest, setNewGuest] = useState(guests);
   const [newRooms, setNewRooms] = useState(rooms);
+  const [valueGuest, setValueGuest] = useState(guests);
+  const [valueRooms, setValueRooms] = useState(rooms);
+  const [valueCheckIn, setValueCheckIn] = useState(newCheckIn);
+  const [valueCheckOut, setValueCheckOut] = useState(newCheckIn);
+  const [newDateCheckIn, setNewDateCheckIn] = useState(dateCheckIn);
+  const [newDateCheckOut, setNewDateCheckOut] = useState(dateCheckOut);
 
   useEffect(() => {
-    dispatch(fetchHotels(route.params));
-  }, []);
+    dispatch(
+      fetchHotels({
+        location,
+        checkIn: newCheckIn,
+        checkOut: newCheckOut,
+        guests: newGuest,
+        rooms: newRooms,
+      }),
+    );
+  }, [newCheckIn, newCheckOut, newGuest, newRooms]);
+
+  const ubah = () => {
+    setModalVisible(true);
+  };
+
+  console.log(newDateCheckIn);
+
+  const changeHotels = () => {
+    setNewGuest(valueGuest === guests ? guests : valueGuest);
+    setModalVisible(false);
+    setNewRooms(valueRooms === rooms ? rooms : valueRooms);
+    setNewCheckIn(valueCheckIn === checkIn ? checkIn : valueCheckIn);
+    setNewCheckOut(valueCheckOut === checkOut ? checkOut : valueCheckOut);
+    setNewDateCheckIn(
+      newDateCheckIn === dateCheckIn ? dateCheckIn : newDateCheckIn,
+    );
+    setNewDateCheckOut(
+      newCheckOut === dateCheckOut ? dateCheckOut : newDateCheckOut,
+    );
+  };
+
+  console.log(newDateCheckIn);
+
+  
+
+  useEffect(() => {
+    if (valueGuest < valueRooms) {
+      setValueRooms(valueGuest);
+    } else if (valueGuest === 8 && valueRooms === 1) {
+      setValueRooms(valueRooms + 1);
+    }
+  });
 
   return (
     <SafeAreaView style={styles.page}>
@@ -38,13 +98,41 @@ export default function SearchResult({route, navigation}) {
             Search result for "{location}"
           </Text>
           <Text style={{color: colors.darkBlue, fontSize: 15}}>
-            {newCheckIn} - {newCheckOut}
+            {newDateCheckIn} - {newDateCheckOut}
           </Text>
           <Text style={{color: colors.darkBlue, fontSize: 15}}>
             {newGuest} person | {newRooms} rooms
           </Text>
         </View>
-        <Button title="ubah" color={colors.darkBlue} width={50} />
+        <Button
+          title="ubah"
+          color={colors.darkBlue}
+          width={50}
+          onPress={ubah}
+        />
+        <ModalEdit
+          visible={modalVisible}
+          onPressCancel={() => {
+            setModalVisible(false);
+            setValueGuest(newGuest);
+          }}
+          onRequestClose={() => setModalVisible(!modalVisible)}
+          setNewCheckIn={setValueCheckIn}
+          setNewCheckOut={setValueCheckOut}
+          setNewDateCheckIn={setNewDateCheckIn}
+          setNewDateCheckOut={setNewDateCheckOut}
+          valueCheckIn={valueCheckIn}
+          valueCheckOut={valueCheckOut}
+          checkIn={formatCheckIn}
+          checkOut={formatCheckOut}
+          guest={valueGuest}
+          rooms={valueRooms}
+          plusGuest={() => setValueGuest(valueGuest + 1)}
+          minGuest={() => setValueGuest(valueGuest - 1)}
+          plusRooms={() => setValueRooms(valueRooms + 1)}
+          minRooms={() => setValueRooms(valueRooms - 1)}
+          search={changeHotels}
+        />
       </View>
       {isPending ? (
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -61,16 +149,16 @@ export default function SearchResult({route, navigation}) {
       ) : (
         <ScrollView>
           <View style={{padding: 10, paddingTop: 0, marginBottom: 100}}>
-            {hotels.map(item => (
+            {hotels?.map(item => (
               <HotelCard
                 key={item?.hotel_id}
                 onPress={() =>
                   navigation.navigate('DetailHotel', {
                     hotel_id: item?.hotel_id,
-                    checkIn: checkIn,
-                    checkOut: checkOut,
-                    guests: guests,
-                    rooms: rooms,
+                    checkIn: newCheckIn,
+                    checkOut: newCheckOut,
+                    guests: newGuest,
+                    rooms: newRooms,
                     image: item?.main_photo_url,
                   })
                 }
@@ -82,8 +170,8 @@ export default function SearchResult({route, navigation}) {
                 // city={item?.city}
                 reviewScore={item?.review_score}
                 reviewTotal={item?.review_nr}
-                guests={guests}
-                rooms={rooms}
+                guests={newGuest}
+                rooms={newRooms}
               />
             ))}
           </View>

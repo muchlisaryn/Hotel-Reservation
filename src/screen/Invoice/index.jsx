@@ -13,8 +13,11 @@ import {colors} from '../../utils';
 import {Button} from '../../component/atoms';
 import {Header} from '../../component/molecules';
 import {useSelector} from 'react-redux';
+import {useState, useEffect} from 'react';
 
 export default function Invoice({route, navigation}) {
+  const [statusOrder, setStatusOrder] = useState('Sedang di verifikasi');
+  const [colorStatus, setColorStatus] = useState(colors.yellow);
   const {book_id, afterCheckout} = route.params;
   const user = useSelector(state => state.login.user);
   const bookHistory = useSelector(
@@ -23,12 +26,22 @@ export default function Invoice({route, navigation}) {
   const bookHistoryById = bookHistory.find(item => item.book_id === book_id);
   const imageResize = img => img?.replace('square60', 'max500');
 
+  useEffect(() => {
+    if (statusOrder === 'Sedang di verifikasi') {
+      setColorStatus(colors.darkBlue);
+    } else if (statusOrder === 'Berhasil di verifikasi') {
+      setColorStatus(colors.yellow);
+    } else if (statusOrder === 'Ditolak') {
+      setColorStatus(colors.yellow);
+    }
+  }, []);
+
   console.log(bookHistoryById);
   return (
     <SafeAreaView style={styles.container}>
       <View style={{padding: 20, backgroundColor: colors.darkBlue}}>
         <Header
-          title="Invoice"
+          title={`Order ID : #${bookHistoryById.order_id}`}
           onPress={() =>
             afterCheckout ? navigation.navigate('main') : navigation.goBack()
           }
@@ -58,78 +71,105 @@ export default function Invoice({route, navigation}) {
               <Text style={styles.text(colors.white)}>Booking ID:</Text>
               <Text style={styles.invoiceId}>{bookHistoryById.book_id}</Text>
             </View>
-            <View style={styles.rowContainer}>
-              <Text style={styles.text(colors.darkGrey)}>
-                Transaction Time:
+
+            <View style={styles.card}>
+              <Text style={{color: colors.black, fontWeight: '600'}}>
+                DETAIL ORDER
               </Text>
-              <Text
-                style={[
-                  styles.text(colors.black),
-                  {flex: 1, textAlign: 'right', color: colors.black},
-                ]}>
-                {bookHistoryById.transaction_time}
-              </Text>
+              <View style={styles.rowContainer}>
+                <Text style={styles.text(colors.darkGrey)}>
+                  Tanggal Pembayaran:
+                </Text>
+                <Text
+                  style={[
+                    styles.text(colors.black),
+                    {flex: 1, textAlign: 'right', color: colors.black},
+                  ]}>
+                  {bookHistoryById.transaction_time}
+                </Text>
+              </View>
+
+              <View style={styles.rowContainer}>
+                <Text style={styles.text(colors.darkGrey)}>Total Payment:</Text>
+                <Text
+                  style={[
+                    styles.text(colors.black),
+                    {flex: 1, textAlign: 'right', fontWeight: '800'},
+                  ]}>
+                  {bookHistoryById.price}
+                </Text>
+              </View>
+
+              <View style={styles.rowContainer}>
+                <Text style={styles.text(colors.darkGrey)}>
+                  Bukti Pembayaran
+                </Text>
+                <Text
+                  style={[
+                    styles.text(colorStatus),
+                    {
+                      flex: 1,
+                      textAlign: 'right',
+                    },
+                  ]}>
+                  Lihat disini
+                </Text>
+              </View>
+
+              <View style={styles.rowContainer}>
+                <Text style={styles.text(colors.darkGrey)}>
+                  Status Pembayaran
+                </Text>
+                <Text
+                  style={[
+                    styles.text(colorStatus),
+                    {flex: 1, textAlign: 'right', fontWeight: 'bold'},
+                  ]}>
+                  {statusOrder}
+                </Text>
+              </View>
             </View>
 
-            <View style={styles.rowContainer}>
-              <Text style={styles.text(colors.darkGrey)}>Check In Date:</Text>
-              <Text
-                style={[
-                  styles.text(colors.black),
-                  {flex: 1, textAlign: 'right'},
-                ]}>
-                {bookHistoryById.checkIn}
+            <View style={styles.card}>
+              <Text style={{color: colors.black, fontWeight: '600'}}>
+                DETAIL RESERVASI
               </Text>
-            </View>
-            <View style={styles.rowContainer}>
-              <Text style={styles.text(colors.darkGrey)}>Check Out Date:</Text>
-              <Text
-                style={[
-                  styles.text(colors.black),
-                  {flex: 1, textAlign: 'right'},
-                ]}>
-                {bookHistoryById.checkOut}
-              </Text>
-            </View>
-            <View style={styles.rowContainer}>
-              <Text style={styles.text(colors.darkGrey)}>Length of Stay:</Text>
-              <Text
-                style={[
-                  styles.text(colors.black),
-                  {flex: 1, textAlign: 'right'},
-                ]}>
-                {bookHistoryById.stay_length} days
-              </Text>
-            </View>
-            <View style={styles.rowContainer}>
-              <Text style={styles.text(colors.darkGrey)}>Total Guests:</Text>
-              <Text
-                style={[
-                  styles.text(colors.black),
-                  {flex: 1, textAlign: 'right'},
-                ]}>
-                {bookHistoryById.person} guests
-              </Text>
-            </View>
-            <View style={styles.rowContainer}>
-              <Text style={styles.text(colors.darkGrey)}>Room Name:</Text>
-              <Text
-                style={[
-                  styles.text(colors.black),
-                  {flex: 1, textAlign: 'right'},
-                ]}>
-                {bookHistoryById.name_room}
-              </Text>
-            </View>
-            <View style={styles.rowContainer}>
-              <Text style={styles.text(colors.darkGrey)}>Total Payment:</Text>
-              <Text
-                style={[
-                  styles.text(colors.black),
-                  {flex: 1, textAlign: 'right', fontWeight: '800'},
-                ]}>
-                {bookHistoryById.price}
-              </Text>
+
+              <View style={styles.rowContainer}>
+                <Text style={styles.text(colors.darkGrey)}>Tanggal</Text>
+                <Text
+                  style={[
+                    styles.text(colors.black),
+                    {flex: 1, textAlign: 'right'},
+                  ]}>
+                  {bookHistoryById.checkIn} - {bookHistoryById.checkOut}{' '}
+                  {`(${bookHistoryById.stay_length} Days)`}
+                </Text>
+              </View>
+
+              <View style={styles.rowContainer}>
+                <Text style={styles.text(colors.darkGrey)}>
+                  Jumlah Tamu & Kamar:
+                </Text>
+                <Text
+                  style={[
+                    styles.text(colors.black),
+                    {flex: 1, textAlign: 'right'},
+                  ]}>
+                  {bookHistoryById.person} Orang | {bookHistoryById.room} Kamar
+                </Text>
+              </View>
+
+              <View style={styles.rowContainer}>
+                <Text style={styles.text(colors.darkGrey)}>Nama Kamar:</Text>
+                <Text
+                  style={[
+                    styles.text(colors.black),
+                    {flex: 1, textAlign: 'right'},
+                  ]}>
+                  {bookHistoryById.name_room}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
@@ -142,6 +182,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.white,
     flex: 1,
+  },
+  card: {
+    marginVertical: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: colors.darkGrey,
   },
   img: {
     width: '100%',

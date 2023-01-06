@@ -26,7 +26,9 @@ export default function Button({
     );
   }
   return (
-    <TouchableOpacity style={styles.background(color, width)} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.background(color, width, type)}
+      onPress={onPress}>
       <Text style={styles.text(color, type, fontSize)}>{title}</Text>
     </TouchableOpacity>
   );

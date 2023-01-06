@@ -13,7 +13,6 @@ import Header from '../../component/molecules/Header';
 import {colors, headers} from '../../utils';
 import Location from './parts/Location';
 import Button from '../../component/atoms/Button';
-import axios from 'axios';
 import ReviewParts from './parts/Review';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchDetail} from '../../features/detailHotelSlice';
@@ -21,47 +20,24 @@ import {fetchReview} from '../../features/ReviewSlice';
 import Kebijakan from './parts/Kebijakan';
 import {formatIDR} from '../../utils';
 import Swiper from 'react-native-swiper';
+import {fetchPhoto} from '../../features/photoHotelSlice';
 
 export default function DetailHotel({route, navigation}) {
   const {hotel_id, checkIn, checkOut, guests, rooms, image} = route.params;
-  const [hotelPhotos, setHotelPhotos] = useState([]);
+  // const [hotelPhotos, setHotelPhotos] = useState([]);
   const [lineText, setLineText] = useState(3);
   const [isFavorite, setIsFavorite] = useState(false);
   const dispatch = useDispatch();
   const detail = useSelector(state => state.detail.detail);
   const isPending = useSelector(state => state.detail.isPending);
   const review = useSelector(state => state.review.review);
-  const user = useSelector(state => state.login.user);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.request({
-          method: 'GET',
-          url: 'https://apidojo-booking-v1.p.rapidapi.com/properties/get-hotel-photos',
-          params: {hotel_ids: hotel_id, languagecode: 'id'},
-          headers,
-        });
-        console.log(process.env.REACT_APP_API_KEY);
-        setHotelPhotos(response.data.data[hotel_id]);
-      } catch (e) {
-        throw e;
-      }
-    };
-    if (detail?.hotel_id !== hotel_id) {
-      fetchData();
-    }
-  }, []);
+  const hotelPhotos = useSelector(state => state.photo.photo);
 
   useEffect(() => {
     if (detail?.hotel_id !== hotel_id) {
       dispatch(fetchReview(route.params));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (detail?.hotel_id !== hotel_id) {
       dispatch(fetchDetail(route.params));
+      dispatch(fetchPhoto(route.params));
     }
   }, []);
 

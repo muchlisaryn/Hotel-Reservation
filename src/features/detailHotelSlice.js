@@ -58,7 +58,6 @@ const detailSlice = createSlice({
         state.detail = action.payload;
         state.isSuccess = true;
         state.isPending = false;
-        state.loading = false;
         state.errorMessage = '';
       });
   },

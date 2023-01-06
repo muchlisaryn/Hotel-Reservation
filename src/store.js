@@ -21,6 +21,7 @@ import {
   REHYDRATE,
 } from 'redux-persist';
 import getRoomsSlice from './features/getRoomsSlice';
+import photoHotelSlice from './features/photoHotelSlice';
 
 const persistConfig = {
   key: 'root',
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   review: ReviewSlice,
   detail: detailHotelSlice,
   rooms: getRoomsSlice,
+  photo: photoHotelSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

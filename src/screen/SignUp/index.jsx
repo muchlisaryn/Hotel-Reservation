@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {Header} from '../../component/molecules';
 import {colors} from '../../utils';
 import {Button, Gap, Input} from '../../component/atoms';
+import axios from 'axios';
 
 export default function SignUp({navigation}) {
   const [username, setUsername] = useState('');
@@ -13,62 +14,54 @@ export default function SignUp({navigation}) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [telephone, setTelephone] = useState(0);
 
+  const signUp = () => {
+    axios
+      .post('http://192.168.1.2:9000/api/v1/cms/organizer', {
+        organizer: username,
+        name: firstName + lastName,
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword,
+        role: 'admin',
+      })
+      .then(Response => {
+        console.log(Response);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   return (
     <SafeAreaView style={styles.page}>
-      <Header title="Sign Up" onPress={() => navigation.goBack()} />
-      <ScrollView>
-        <View style={styles.content}>
-          <View style={styles.input}>
-            <Input
-              type="user"
-              placeholder="Username"
-              onChangeText={value => setUsername(value)}
-            />
-            <Gap height={10} />
-            <Input
-              type="user"
-              placeholder="First Name"
-              onChangeText={value => setFirstName(value)}
-            />
-            <Gap height={10} />
-            <Input
-              type="user"
-              placeholder="Last Name"
-              onChangeText={value => setLastName(value)}
-            />
-            <Gap height={10} />
-            <Input
-              type="email"
-              placeholder="Email"
-              onChangeText={value => setEmail(value)}
-            />
-            <Gap height={10} />
-            <Input
-              value={password}
-              type="password"
-              placeholder="Password"
-              onChangeText={value => setPassword(value)}
-            />
-            <Gap height={10} />
-            <Input
-              value={confirmPassword}
-              type="password"
-              placeholder="Ulangi Password"
-              onChangeText={value => setConfirmPassword(value)}
-            />
-            <Gap height={10} />
-            <Input
-              type="telephone"
-              placeholder="Phone"
-              onChangeText={value => setTelephone(value)}
-              keyboardType="numeric"
-            />
-          </View>
-          <Button
-            title="Sign Up"
-            onPress={() => navigation.navigate('Sign')}
-            color={colors.yellow}
+      <Header title="Registrasi" onPress={() => navigation.goBack()} />
+
+      <View style={styles.content}>
+        <View style={styles.input}>
+          <Text style={styles.headerInput}>Email</Text>
+          <Input
+            type="email"
+            placeholder="Masukan alamat email"
+            onChangeText={value => setEmail(value)}
           />
+
+          <Text style={styles.headerInput}>Password</Text>
+          <Input
+            value={password}
+            type="password"
+            placeholder="Masukan Password"
+            onChangeText={value => setPassword(value)}
+          />
+
+          <Text style={styles.headerInput}>Ulangi Password</Text>
+          <Input
+            value={confirmPassword}
+            type="password"
+            placeholder="Ulangi Password"
+            onChangeText={value => setConfirmPassword(value)}
+          />
+          <Gap height={20} />
+          <Button title="Continue" onPress={signUp} color={colors.yellow} />
           <View
             style={{
               flexDirection: 'row',
@@ -90,7 +83,7 @@ export default function SignUp({navigation}) {
             />
           </View>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -104,6 +97,10 @@ const styles = StyleSheet.create({
   content: {
     justifyContent: 'center',
     flex: 1,
+  },
+  headerInput: {
+    color: colors.white,
+    marginVertical: 5,
   },
   input: {
     marginVertical: 30,
