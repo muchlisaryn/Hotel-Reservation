@@ -2,12 +2,12 @@ import {View, Text, StyleSheet, Image} from 'react-native';
 import React from 'react';
 import {Button} from '../../atoms';
 import {colors} from '../../../utils';
-import {LogoSecondary} from '../../../assets/img';
+import {DefaultPhoto, LogoSecondary} from '../../../assets/img';
 import {useSelector} from 'react-redux';
 
 export default function Header({title, onPress, type, color, numberOfLines}) {
   const user = useSelector(state => state?.login?.user);
-
+  console.log(user);
   if (type === 'user') {
     return (
       <View
@@ -30,9 +30,13 @@ export default function Header({title, onPress, type, color, numberOfLines}) {
             </Text>
             <Text style={styles.Sayhello}>{user?.firstName}</Text>
             <Image
-              source={{
-                uri: user?.image,
-              }}
+              source={
+                !user?.image
+                  ? DefaultPhoto
+                  : {
+                      uri: user?.image,
+                    }
+              }
               style={styles.Image}
             />
           </View>

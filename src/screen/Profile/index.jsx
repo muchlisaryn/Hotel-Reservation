@@ -14,6 +14,7 @@ import {removeLogin} from '../../features/loginSlice';
 import LogoutModal from './parts/LogoutModal';
 import {useState} from 'react';
 import {PageUndifined} from '../../component/molecules';
+import {DefaultPhoto} from '../../assets/img';
 
 export default function Profile({navigation}) {
   const dispatch = useDispatch();
@@ -41,7 +42,10 @@ export default function Profile({navigation}) {
           {user ? (
             <>
               <View style={styles.profileUser}>
-                <Image source={{uri: user?.image}} style={styles.image} />
+                <Image
+                  source={!user?.image ? DefaultPhoto : {uri: user?.image}}
+                  style={styles.image}
+                />
                 <View style={{marginTop: 10}}>
                   <Text style={styles.userName}>
                     {user?.firstName} {user?.lastName}
@@ -80,7 +84,7 @@ export default function Profile({navigation}) {
                   title="Password"
                   dataEditable={true}
                   isPassword={true}
-                  data={user?.pass}
+                  data={user?.password}
                   prop="pass"
                 />
                 <SettingsRow
@@ -104,7 +108,7 @@ export default function Profile({navigation}) {
                 <SettingsRow
                   title="Phone"
                   dataEditable={true}
-                  data={user?.phone}
+                  data={user?.telephone}
                   prop="phone"
                   keyboardType="numeric"
                 />

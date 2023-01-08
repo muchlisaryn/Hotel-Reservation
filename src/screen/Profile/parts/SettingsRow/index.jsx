@@ -11,6 +11,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateUser} from '../../../../features/loginSlice';
 import {colors} from '../../../../utils';
+import axios from 'axios';
 
 export default function SettingsRow({
   isPassword,
@@ -21,10 +22,22 @@ export default function SettingsRow({
   dataEditable,
   keyboardType,
 }) {
+  const user = useSelector(state => state.login.user);
   const dispatch = useDispatch();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [inputTextValue, setInputTextValue] = useState(data);
+
+  const edit = () => {
+    dispatch(updateUser({prop, value: inputTextValue}));
+    axios
+      .post(`${process.env.REACT_APP_URL_SERVER}/cms/users/${user.id}`, {
+        username: inputTextValue,
+      })
+      .then(reponse => console.log(reponse))
+      .catch(ress => console.log(ress));
+    setModalVisible(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -51,10 +64,7 @@ export default function SettingsRow({
               setInputTextValue(data);
               setModalVisible(false);
             }}
-            onPressEdit={() => {
-              dispatch(updateUser({prop, value: inputTextValue}));
-              setModalVisible(false);
-            }}
+            onPressEdit={edit}
             data={inputTextValue}
             onChangeText={setInputTextValue}
             isPassword={isPassword}

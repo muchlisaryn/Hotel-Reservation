@@ -15,6 +15,7 @@ import DetailRoom from './DetailRoom';
 import BookingSuccess from './BookingSuccess';
 import Payment from './Payment';
 import SignUp from './SignUp';
+import DataDiri from './DataDiri';
 
 export {
   Sign,
@@ -34,4 +35,5 @@ export {
   BookingSuccess,
   Payment,
   SignUp,
+  DataDiri,
 };

@@ -18,6 +18,7 @@ import {
   BookingSuccess,
   SignUp,
   Payment,
+  DataDiri,
 } from '../screen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -153,6 +154,11 @@ const Router = () => {
       <Stack.Screen
         name="Payment"
         component={Payment}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="DataDiri"
+        component={DataDiri}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

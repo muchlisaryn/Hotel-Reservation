@@ -13,45 +13,56 @@ import {Logo} from '../../assets/img';
 export default function Sign({navigation}) {
   const dispatch = useDispatch();
 
-  const user = useSelector(state => state.login.user);
-
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  console.log();
 
   const Login = async () => {
     try {
       const responseAuth = await axios.post(
-        'https://dummyjson.com/auth/login',
+        `${process.env.REACT_APP_URL_SERVER}/cms/auth/signin`,
         {
-          username: username,
+          email: email,
           password: password,
         },
       );
-      const responseUserData = await axios.get(
-        `https://dummyjson.com/users/${responseAuth.data.id}`,
-      );
+      console.log(responseAuth.data);
       dispatch(
         setUser({
           auth: responseAuth.data,
-          pass: responseUserData.data.password,
-          phone: responseUserData.data.phone,
         }),
       );
       navigation.navigate('main');
     } catch (e) {
-      throw e;
+      console.log(e);
     }
-    // .then(response => {
-    //   console.log(response);
-    //   dispatch(setUser({auth: response.data, pass: password}))
-    //   navigation.navigate('main');
-    // })
-    // .catch(err => {
-    //   console.log(err);
-    // });
   };
 
-  console.log(username);
+  // const Logins = async () => {
+  //   try {
+  //     const responseAuth = await axios.post(
+  //       'https://dummyjson.com/auth/login',
+  //       {
+  //         username: username,
+  //         password: password,
+  //       },
+  //     );
+  //     const responseUserData = await axios.get(
+  //       `https://dummyjson.com/users/${responseAuth.data.id}`,
+  //     );
+  //     dispatch(
+  //       setUser({
+  //         auth: responseAuth.data,
+  //         pass: responseUserData.data.password,
+  //         phone: responseUserData.data.phone,
+  //       }),
+  //     );
+  //     navigation.navigate('main');
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 
   return (
     <View style={styles.page}>
@@ -63,18 +74,18 @@ export default function Sign({navigation}) {
           }}>
           <Logo />
         </View>
-        <Text style={styles.text}>Masukan Username dan Password Anda</Text>
+        <Text style={styles.text}>Masukan Email dan Password Anda</Text>
         <View style={styles.Input}>
           <Input
-            type="user"
-            placeholder="Masukan Username"
-            onChangeText={value => setUsername(value)}
+            type="email"
+            placeholder="Masukan Email Anda..."
+            onChangeText={value => setEmail(value)}
           />
           <Gap height={10} />
           <View>
             <Input
               type="password"
-              placeholder="Masukan Password"
+              placeholder="Masukan Password Anda..."
               onChangeText={value => setPassword(value)}
             />
           </View>

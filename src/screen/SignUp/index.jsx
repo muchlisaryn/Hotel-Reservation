@@ -1,36 +1,13 @@
-import {View, Text, SafeAreaView, ScrollView, StyleSheet} from 'react-native';
+import {View, Text, SafeAreaView, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {Header} from '../../component/molecules';
 import {colors} from '../../utils';
 import {Button, Gap, Input} from '../../component/atoms';
-import axios from 'axios';
 
 export default function SignUp({navigation}) {
-  const [username, setUsername] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [telephone, setTelephone] = useState(0);
-
-  const signUp = () => {
-    axios
-      .post('http://192.168.1.2:9000/api/v1/cms/organizer', {
-        organizer: username,
-        name: firstName + lastName,
-        email: email,
-        password: password,
-        confirmPassword: confirmPassword,
-        role: 'admin',
-      })
-      .then(Response => {
-        console.log(Response);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
 
   return (
     <SafeAreaView style={styles.page}>
@@ -61,7 +38,16 @@ export default function SignUp({navigation}) {
             onChangeText={value => setConfirmPassword(value)}
           />
           <Gap height={20} />
-          <Button title="Continue" onPress={signUp} color={colors.yellow} />
+          <Button
+            title="Continue"
+            color={colors.yellow}
+            onPress={() =>
+              navigation.navigate('DataDiri', {
+                email,
+                password,
+              })
+            }
+          />
           <View
             style={{
               flexDirection: 'row',
