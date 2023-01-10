@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -21,8 +22,11 @@ export default function BookHistoryCard({
   price,
   mainImage,
   transaction,
+  statusOrder,
+  statusPayment,
 }) {
   const imageResize = mainImage?.replace('square60', 'max500');
+
   return (
     <View style={styles.container}>
       <Pressable
@@ -52,10 +56,25 @@ export default function BookHistoryCard({
               <Text style={styles.text(colors.darkBlue)}>{price}</Text>
             </View>
           </View>
-          <Text
-            style={{color: colors.darkGrey, fontSize: 12, fontWeight: '400'}}>
-            {checkIn} - {checkOut} ({stay_length} days)
-          </Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text
+              style={{color: colors.darkGrey, fontSize: 12, fontWeight: '400'}}>
+              {checkIn} - {checkOut} ({stay_length} days)
+            </Text>
+            {statusPayment === 'Sedang di verifikasi' ? (
+              <Text>Sedang di verifikasi</Text>
+            ) : (
+              <>
+                {statusOrder ? (
+                  <Text style={styles.statusOrder(colors.darkGreen)}>
+                    Aktif
+                  </Text>
+                ) : (
+                  <Text style={styles.statusOrder(colors.red)}>Selesai</Text>
+                )}
+              </>
+            )}
+          </View>
         </View>
       </Pressable>
     </View>
@@ -100,4 +119,11 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 10,
     borderBottomEndRadius: 10,
   },
+  statusOrder: color => ({
+    color: color,
+    backgroundColor:
+      color === colors.red ? colors.primaryRed : colors.primaryGreen,
+    paddingHorizontal: 4,
+    borderRadius: 4,
+  }),
 });

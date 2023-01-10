@@ -23,6 +23,7 @@ import {
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
+import SuccessLogin from '../screen/SuccessLogin';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -97,10 +98,16 @@ const Router = () => {
         </>
       )}
       <Stack.Screen
+        name="SuccessLogin"
+        component={SuccessLogin}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="Splash"
         component={Splash}
         options={{headerShown: false}}
       />
+
       <Stack.Screen
         name="main"
         component={MainApp}

@@ -1,32 +1,9 @@
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-  FlatList,
-} from 'react-native';
-import {Button} from '../../component/atoms';
+import {useSelector} from 'react-redux';
+import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import HotelCard from '../../component/molecules/HotelCard';
 import {colors} from '../../utils';
 import {PageUndifined} from '../../component/molecules';
-
-const formatDate = date => {
-  let month = '' + (date.getMonth() + 1);
-  let day = '' + date.getDate();
-  let year = date.getFullYear();
-
-  if (month.length < 2) {
-    month = '0' + month;
-  }
-  if (day.length < 2) {
-    day = '0' + day;
-  }
-  return [year, month, day].join('-');
-};
+import {formatDate} from '../../utils/formatDate';
 
 const today = new Date();
 const tomorrow = new Date();

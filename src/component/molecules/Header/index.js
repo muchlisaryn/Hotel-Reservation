@@ -6,7 +6,8 @@ import {DefaultPhoto, LogoSecondary} from '../../../assets/img';
 import {useSelector} from 'react-redux';
 
 export default function Header({title, onPress, type, color, numberOfLines}) {
-  const user = useSelector(state => state?.login?.user);
+  // const user = useSelector(state => state?.login?.user);
+  const user = useSelector(state => state.auth.user);
   console.log(user);
   if (type === 'user') {
     return (

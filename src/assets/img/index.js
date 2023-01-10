@@ -8,6 +8,7 @@ import notLogin from './notLogin.png';
 import HotelNotFound from './HotelNotFound.png';
 import Empty from './Empty.png';
 import DefaultPhoto from './default.png';
+import BtnAddPhoto from './btn_add_photo.svg';
 
 export {
   DefaultPhoto,
@@ -20,4 +21,5 @@ export {
   notLogin,
   HotelNotFound,
   Empty,
+  BtnAddPhoto,
 };

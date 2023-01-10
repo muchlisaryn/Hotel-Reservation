@@ -25,7 +25,6 @@ export default function SearchResult({route, navigation}) {
   } = route.params;
 
   const [modalVisible, setModalVisible] = useState(false);
-
   const [newCheckIn, setNewCheckIn] = useState(checkIn);
   const [newCheckOut, setNewCheckOut] = useState(checkOut);
   const [newGuest, setNewGuest] = useState(guests);
@@ -36,6 +35,8 @@ export default function SearchResult({route, navigation}) {
   const [valueCheckOut, setValueCheckOut] = useState(newCheckIn);
   const [newDateCheckIn, setNewDateCheckIn] = useState(dateCheckIn);
   const [newDateCheckOut, setNewDateCheckOut] = useState(dateCheckOut);
+
+  console.log(newDateCheckIn);
 
   useEffect(() => {
     dispatch(
@@ -53,8 +54,6 @@ export default function SearchResult({route, navigation}) {
     setModalVisible(true);
   };
 
-  console.log(newDateCheckIn);
-
   const changeHotels = () => {
     setNewGuest(valueGuest === guests ? guests : valueGuest);
     setModalVisible(false);
@@ -68,10 +67,6 @@ export default function SearchResult({route, navigation}) {
       newCheckOut === dateCheckOut ? dateCheckOut : newDateCheckOut,
     );
   };
-
-  console.log(newDateCheckIn);
-
-  
 
   useEffect(() => {
     if (valueGuest < valueRooms) {
@@ -115,6 +110,8 @@ export default function SearchResult({route, navigation}) {
           onPressCancel={() => {
             setModalVisible(false);
             setValueGuest(newGuest);
+            setNewDateCheckIn(dateCheckIn);
+            setNewDateCheckOut(dateCheckOut);
           }}
           onRequestClose={() => setModalVisible(!modalVisible)}
           setNewCheckIn={setValueCheckIn}
@@ -135,7 +132,7 @@ export default function SearchResult({route, navigation}) {
         />
       </View>
       {isPending ? (
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
           <Text
             style={{
               color: colors.darkBlue,

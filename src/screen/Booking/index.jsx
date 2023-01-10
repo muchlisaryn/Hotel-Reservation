@@ -11,6 +11,7 @@ import React, {useState} from 'react';
 import {Button, Input} from '../../component/atoms';
 import {colors, formatIDR} from '../../utils';
 import {Header} from '../../component/molecules';
+import {lengthOfDay, convertDate} from '../../utils/formatDate';
 
 function makeid(length) {
   var result = '';
@@ -33,24 +34,6 @@ const orderID = length => {
 };
 
 const date = new Date();
-
-const convertDate = inputFormat => {
-  const pad = s => {
-    return s < 10 ? '0' + s : s;
-  };
-  var d = new Date(inputFormat);
-  return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
-};
-
-console.log(convertDate(date));
-
-const lengthOfDay = (date1, date2) => {
-  let d1 = new Date(date1);
-  let d2 = new Date(date2);
-  let Difference_In_Time = d2.getTime() - d1.getTime();
-  let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-  return Difference_In_Days;
-};
 
 export default function Booking({route, navigation}) {
   const book_id = makeid(12);

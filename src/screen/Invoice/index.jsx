@@ -1,24 +1,19 @@
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
-  FlatList,
   Image,
 } from 'react-native';
 import {colors} from '../../utils';
-import {Button} from '../../component/atoms';
 import {Header} from '../../component/molecules';
 import {useSelector} from 'react-redux';
 import {useState, useEffect} from 'react';
 
 export default function Invoice({route, navigation}) {
-  const [statusOrder, setStatusOrder] = useState('Sedang di verifikasi');
   const [colorStatus, setColorStatus] = useState(colors.yellow);
-  const {book_id, afterCheckout} = route.params;
+  const {book_id, afterCheckout, statusOrder, statusPayment} = route.params;
   const user = useSelector(state => state.login.user);
   const bookHistory = useSelector(
     state => state.bookHistory.bookHistories[user.username],
@@ -27,16 +22,15 @@ export default function Invoice({route, navigation}) {
   const imageResize = img => img?.replace('square60', 'max500');
 
   useEffect(() => {
-    if (statusOrder === 'Sedang di verifikasi') {
+    if (statusPayment === 'Sedang di verifikasi') {
       setColorStatus(colors.darkBlue);
-    } else if (statusOrder === 'Berhasil di verifikasi') {
-      setColorStatus(colors.yellow);
-    } else if (statusOrder === 'Ditolak') {
-      setColorStatus(colors.yellow);
+    } else if (statusPayment === 'Berhasil di verifikasi') {
+      setColorStatus(colors.darkGreen);
+    } else if (statusPayment === 'Ditolak') {
+      setColorStatus(colors.red);
     }
   }, []);
 
-  console.log(bookHistoryById);
   return (
     <SafeAreaView style={styles.container}>
       <View style={{padding: 20, backgroundColor: colors.darkBlue}}>
@@ -59,18 +53,27 @@ export default function Invoice({route, navigation}) {
             <Text numberOfLines={2} style={styles.textHeader}>
               {bookHistoryById.hotel_name}
             </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                backgroundColor: colors.darkBlue,
-                padding: 5,
-                borderRadius: 10,
-              }}>
-              <Text style={styles.text(colors.white)}>Booking ID:</Text>
-              <Text style={styles.invoiceId}>{bookHistoryById.book_id}</Text>
-            </View>
+
+            {statusOrder ? (
+              <>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    backgroundColor: colors.darkBlue,
+                    padding: 5,
+                    borderRadius: 10,
+                  }}>
+                  <Text style={styles.text(colors.white)}>Booking ID:</Text>
+                  <Text style={styles.invoiceId}>
+                    {bookHistoryById.book_id}
+                  </Text>
+                </View>
+              </>
+            ) : (
+              <></>
+            )}
 
             <View style={styles.card}>
               <Text style={{color: colors.black, fontWeight: '600'}}>
@@ -106,7 +109,7 @@ export default function Invoice({route, navigation}) {
                 </Text>
                 <Text
                   style={[
-                    styles.text(colorStatus),
+                    styles.text(colors.darkBlue),
                     {
                       flex: 1,
                       textAlign: 'right',
@@ -125,7 +128,7 @@ export default function Invoice({route, navigation}) {
                     styles.text(colorStatus),
                     {flex: 1, textAlign: 'right', fontWeight: 'bold'},
                   ]}>
-                  {statusOrder}
+                  {statusPayment}
                 </Text>
               </View>
             </View>

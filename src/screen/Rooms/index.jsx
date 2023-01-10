@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Image,
-} from 'react-native';
+import {View, Text, SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 import React, {useEffect} from 'react';
 import {Header, RoomsCard} from '../../component/molecules';
 import {colors} from '../../utils';
@@ -49,6 +42,7 @@ export default function Rooms({route, navigation}) {
                   .name_with_count
               }
               person={guests}
+              room_count={item?.room_count}
               onPress={() =>
                 navigation.navigate('DetailRoom', {
                   name_room: item?.name_without_policy,

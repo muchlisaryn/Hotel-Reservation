@@ -10,13 +10,14 @@ export default function RoomsCard({
   image,
   person,
   bed_type,
+  room_count,
 }) {
   return (
     <Pressable onPress={onPress}>
       <View style={styles.container}>
         <Image
           source={{
-            uri: image[1] ? image[1]?.url_original : image[0]?.url_original,
+            uri: image[0]?.url_original,
           }}
           style={styles.image}
         />
@@ -27,32 +28,48 @@ export default function RoomsCard({
             </Text>
             <Text style={styles.price}>{formatIDR.format(price)}</Text>
           </View>
-          <View style={{flexDirection: 'row', marginTop: 5}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 5,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
             <View style={{flexDirection: 'row'}}>
-              <Button
-                type="icon"
-                color={colors.darkBlue}
-                icon={'person-outline'}
-                size={15}
-              />
-              <Text style={styles.Person}>{person} Person</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Button
+                  type="icon"
+                  color={colors.darkBlue}
+                  icon={'person-outline'}
+                  size={15}
+                />
+                <Text style={styles.Person}>{person} Person</Text>
+              </View>
+              {bed_type ? (
+                <>
+                  <Text style={{marginHorizontal: 10}}>|</Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <Button
+                      type="icon"
+                      color={colors.darkBlue}
+                      icon={'bed-outline'}
+                      size={18}
+                    />
+                    <Text style={styles.Person}>{bed_type}</Text>
+                  </View>
+                </>
+              ) : (
+                <></>
+              )}
             </View>
-            {bed_type ? (
-              <>
-                <Text style={{marginHorizontal: 10}}>|</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Button
-                    type="icon"
-                    color={colors.darkBlue}
-                    icon={'bed-outline'}
-                    size={18}
-                  />
-                  <Text style={styles.Person}>{bed_type}</Text>
-                </View>
-              </>
-            ) : (
-              <></>
-            )}
+            <View>
+              {room_count ? (
+                <Text
+                  style={styles.room_count}>{`Sisa kamar ${room_count}`}</Text>
+              ) : (
+                <></>
+              )}
+            </View>
           </View>
         </View>
       </View>
@@ -93,6 +110,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginLeft: 5,
     color: colors.darkBlue,
+    maxWidth: 110,
   },
   banefit: {
     fontSize: 9,
@@ -112,5 +130,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.darkBlue,
     fontWeight: '800',
+  },
+  room_count: {
+    color: colors.red,
+    backgroundColor: colors.primaryRed,
+    padding: 3,
+    borderRadius: 5,
+    paddingHorizontal: 5,
   },
 });

@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {Header, ReviewCard} from '../../component/molecules';
@@ -11,8 +11,13 @@ export default function Reviews({navigation}) {
   return (
     <SafeAreaView>
       <ScrollView>
-        <View style={{ marginBottom: 30 }}>
-          <View style={{backgroundColor: colors.darkBlue, padding: 10, marginBottom: 10}}>
+        <View style={{marginBottom: 30}}>
+          <View
+            style={{
+              backgroundColor: colors.darkBlue,
+              padding: 10,
+              marginBottom: 10,
+            }}>
             <Header title="Review" onPress={() => navigation.goBack()} />
           </View>
           {review?.map((item, index) => (

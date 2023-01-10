@@ -1,26 +1,17 @@
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-  FlatList,
-  Image,
-} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {colors} from '../../utils';
 import {useSelector} from 'react-redux';
 import BookHistoryCard from '../../component/molecules/BookHistoryCard';
 import {PageUndifined} from '../../component/molecules';
+import {useState} from 'react';
 
 export default function Receipt({navigation}) {
+  const [statusOrder, setStatusOrder] = useState(false);
+  const [statusPayment, setStatusPayment] = useState('Sedang di verifikasi');
   const user = useSelector(state => state?.login?.user);
   const bookHistories = useSelector(
     state => state?.bookHistory.bookHistories[user?.username],
   );
-
-  console.log(bookHistories);
 
   if (user) {
     return (
@@ -47,6 +38,8 @@ export default function Receipt({navigation}) {
                       navigation.navigate('Invoice', {
                         book_id: item?.book_id,
                         afterCheckout: false,
+                        statusOrder,
+                        statusPayment,
                       })
                     }
                     hotel_name={item?.hotel_name}
@@ -56,6 +49,7 @@ export default function Receipt({navigation}) {
                     price={item?.price}
                     mainImage={item?.mainImage}
                     transaction={item?.transaction_time}
+                    statusPayment={statusPayment}
                   />
                 ))}
               </View>

@@ -10,7 +10,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {SettingsRow} from './parts';
 import Button from '../../component/atoms/Button';
 import {colors} from '../../utils';
-import {removeLogin} from '../../features/loginSlice';
+import {removeLogin} from '../../features/authSlice';
 import LogoutModal from './parts/LogoutModal';
 import {useState} from 'react';
 import {PageUndifined} from '../../component/molecules';
@@ -18,8 +18,7 @@ import {DefaultPhoto} from '../../assets/img';
 
 export default function Profile({navigation}) {
   const dispatch = useDispatch();
-
-  const user = useSelector(state => state?.login?.user);
+  const user = useSelector(state => state.auth.user);
   const favorites = useSelector(state => state?.favorite?.favorites);
   const bookHistories = useSelector(state => state?.bookHistory?.bookHistories);
   const [modalVisible, setModalVisible] = useState(false);

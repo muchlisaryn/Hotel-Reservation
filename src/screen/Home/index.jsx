@@ -6,25 +6,11 @@ import Header from '../../component/molecules/Header';
 import {useState, useEffect} from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import InputModal from './parts/InputModal';
+import {formatDate} from '../../utils/formatDate';
 
 const maxDate = new Date();
 maxDate.setMonth(maxDate.getMonth() + 1);
 
-const formatDate = date => {
-  const d = new Date(date);
-
-  let month = '' + (d.getMonth() + 1);
-  let day = '' + d.getDate();
-  let year = d.getFullYear();
-
-  if (month.length < 2) {
-    month = '0' + month;
-  }
-  if (day.length < 2) {
-    day = '0' + day;
-  }
-  return [year, month, day].join('-');
-};
 export default function Home({navigation}) {
   const [input, setInput] = useState('');
   const [inputCheckIn, setInputCheckIn] = useState(null);
@@ -196,8 +182,6 @@ export default function Home({navigation}) {
         <View style={{marginLeft: 20}}>
           <Destination title="Top Destinations" data={DataTop} />
           <Destination title="Popular Destinations" data={DataPopular} />
-          {/* <TopDestinations />
-          <PopularDestinations /> */}
         </View>
       </ScrollView>
     </SafeAreaView>

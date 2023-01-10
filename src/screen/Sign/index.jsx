@@ -3,66 +3,33 @@ import React, {useState, useEffect} from 'react';
 import Input from '../../component/atoms/Input';
 import Button from '../../component/atoms/Button';
 import {useDispatch, useSelector} from 'react-redux';
-import {setUser} from '../../features/loginSlice';
-import axios from 'axios';
+
 import {colors} from '../../utils';
 import Header from '../../component/molecules/Header';
 import {Gap} from '../../component/atoms';
 import {Logo} from '../../assets/img';
+import {auth} from '../../features/authSlice';
 
 export default function Sign({navigation}) {
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const loading = useSelector(state => state.auth.loading);
+  const user = useSelector(state => state.auth.user);
 
-  console.log();
-
-  const Login = async () => {
-    try {
-      const responseAuth = await axios.post(
-        `${process.env.REACT_APP_URL_SERVER}/cms/auth/signin`,
-        {
-          email: email,
-          password: password,
-        },
-      );
-      console.log(responseAuth.data);
-      dispatch(
-        setUser({
-          auth: responseAuth.data,
-        }),
-      );
-      navigation.navigate('main');
-    } catch (e) {
-      console.log(e);
-    }
+  console.log('user Pantek =>', user);
+  const Login = () => {
+    dispatch(
+      auth({
+        email: email,
+        password: password,
+      }),
+    );
+    navigation.navigate('main', {
+      initial: false,
+    });
   };
-
-  // const Logins = async () => {
-  //   try {
-  //     const responseAuth = await axios.post(
-  //       'https://dummyjson.com/auth/login',
-  //       {
-  //         username: username,
-  //         password: password,
-  //       },
-  //     );
-  //     const responseUserData = await axios.get(
-  //       `https://dummyjson.com/users/${responseAuth.data.id}`,
-  //     );
-  //     dispatch(
-  //       setUser({
-  //         auth: responseAuth.data,
-  //         pass: responseUserData.data.password,
-  //         phone: responseUserData.data.phone,
-  //       }),
-  //     );
-  //     navigation.navigate('main');
-  //   } catch (e) {
-  //     throw e;
-  //   }
-  // }
 
   return (
     <View style={styles.page}>
@@ -90,7 +57,11 @@ export default function Sign({navigation}) {
             />
           </View>
         </View>
-        <Button title="Login" onPress={Login} color={colors.yellow} />
+        <Button
+          title={loading ? 'loading...' : 'Login'}
+          onPress={Login}
+          color={colors.yellow}
+        />
         <View
           style={{
             flexDirection: 'row',

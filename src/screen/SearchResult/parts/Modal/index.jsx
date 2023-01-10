@@ -4,6 +4,7 @@ import {colors} from '../../../../utils';
 import {Gap} from '../../../../component/atoms';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {formatDate, shortMonth} from '../../../../utils/formatDate';
 
 export default function ModalEdit({
   visible,
@@ -22,8 +23,6 @@ export default function ModalEdit({
   setNewCheckIn,
   setNewDateCheckIn,
   setNewDateCheckOut,
-  valueCheckIn,
-  valueCheckOut,
 }) {
   const date = new Date();
   const maxDate = new Date();
@@ -34,23 +33,13 @@ export default function ModalEdit({
   const [titleCheckIn, setTitleCheckIn] = useState(checkIn);
   const [titleCheckOut, setTitleCheckOut] = useState(checkOut);
 
-  const formatDate = date => {
-    const d = new Date(date);
+  console.log('=>', titleCheckOut);
 
-    let month = '' + (d.getMonth() + 1);
-    let day = '' + d.getDate();
-    let year = d.getFullYear();
-
-    if (month.length < 2) {
-      month = '0' + month;
+  useEffect(() => {
+    if (titleCheckIn > titleCheckOut) {
+      setTitleCheckOut('Check Out');
     }
-    if (day.length < 2) {
-      day = '0' + day;
-    }
-    return [year, month, day].join('-');
-  };
-
-  console.log(minimumDate);
+  });
 
   return (
     <Modal
@@ -139,6 +128,7 @@ export default function ModalEdit({
                     const month = shortMonth.format(new Date(selectedDate));
                     const day = String(selectedDate.getDate());
                     setNewDateCheckOut(day + ' ' + month);
+                    console.log('test => ', month, day);
                   } else {
                     setOpenCheckOut(false);
                   }

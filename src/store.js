@@ -22,6 +22,7 @@ import {
 } from 'redux-persist';
 import getRoomsSlice from './features/getRoomsSlice';
 import photoHotelSlice from './features/photoHotelSlice';
+import authReducer from './features/authSlice';
 
 const persistConfig = {
   key: 'root',
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
   detail: detailHotelSlice,
   rooms: getRoomsSlice,
   photo: photoHotelSlice,
+  auth: authReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -5,12 +5,10 @@ import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
-  Dimensions,
-  FlatList,
 } from 'react-native';
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, {useEffect} from 'react';
 import Header from '../../component/molecules/Header';
-import {colors, headers} from '../../utils';
+import {colors} from '../../utils';
 import Location from './parts/Location';
 import Button from '../../component/atoms/Button';
 import ReviewParts from './parts/Review';
@@ -24,9 +22,7 @@ import {fetchPhoto} from '../../features/photoHotelSlice';
 
 export default function DetailHotel({route, navigation}) {
   const {hotel_id, checkIn, checkOut, guests, rooms, image} = route.params;
-  // const [hotelPhotos, setHotelPhotos] = useState([]);
-  const [lineText, setLineText] = useState(3);
-  const [isFavorite, setIsFavorite] = useState(false);
+
   const dispatch = useDispatch();
   const detail = useSelector(state => state.detail.detail);
   const isPending = useSelector(state => state.detail.isPending);

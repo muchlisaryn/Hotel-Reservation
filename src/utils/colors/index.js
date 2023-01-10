@@ -5,5 +5,9 @@ export const colors = {
   black: 'black',
   pink: '#F80051',
   grey: '#F6F6F6',
-  darkGrey: '#a3a3a3'
+  darkGrey: '#a3a3a3',
+  red: '#FF0000',
+  primaryRed: '#FFE2E2',
+  darkGreen: '#007E33',
+  primaryGreen: '#E2FFE7',
 };
