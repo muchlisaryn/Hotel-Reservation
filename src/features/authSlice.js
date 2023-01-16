@@ -3,10 +3,10 @@ import axios from 'axios';
 
 const initialState = {
   loading: false,
-  user: null, // for user object
-  userToken: null, // for storing the JWT
+  user: null,
+  userToken: null,
   error: null,
-  success: false, // for monitoring the registration process.
+  success: false,
 };
 
 export const auth = createAsyncThunk('auth/authUser', async props => {
@@ -19,7 +19,6 @@ export const auth = createAsyncThunk('auth/authUser', async props => {
         password: password,
       },
     );
-
     return response.data;
   } catch (err) {
     throw err;
@@ -49,7 +48,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.userToken = null;
         state.success = false;
-        state.error = action.error.message;
+        state.error = action.error;
       })
       .addCase(auth.fulfilled, (state, action) => {
         state.user = action.payload;

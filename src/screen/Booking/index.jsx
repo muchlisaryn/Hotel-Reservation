@@ -50,14 +50,14 @@ export default function Booking({route, navigation}) {
     mainImage,
   } = route.params;
 
-  const user = useSelector(state => state.login?.user);
+  const user = useSelector(state => state.auth.user);
   const hotel_name = useSelector(state => state.detail?.detail?.hotel_name);
 
   const [fullName, setFullName] = useState(
     user.firstName + ' ' + user.lastName,
   );
   const [email, setEmail] = useState(user.email);
-  const [telephone, setTelephone] = useState(user.phone);
+  const [telephone, setTelephone] = useState(user.telephone);
 
   return (
     <SafeAreaView style={styles.page}>

@@ -25,7 +25,7 @@ export default function DetailRoom({route, navigation}) {
     detail_room,
     mainImage,
   } = route.params;
-  const user = useSelector(state => state.login.user);
+  const user = useSelector(state => state.auth.user);
 
   return (
     <SafeAreaView style={styles.page}>

@@ -6,9 +6,8 @@ import {DefaultPhoto, LogoSecondary} from '../../../assets/img';
 import {useSelector} from 'react-redux';
 
 export default function Header({title, onPress, type, color, numberOfLines}) {
-  // const user = useSelector(state => state?.login?.user);
   const user = useSelector(state => state.auth.user);
-  console.log(user);
+
   if (type === 'user') {
     return (
       <View
@@ -35,7 +34,7 @@ export default function Header({title, onPress, type, color, numberOfLines}) {
                 !user?.image
                   ? DefaultPhoto
                   : {
-                      uri: user?.image,
+                      uri: `http://192.168.1.8:8000/${user?.image}`,
                     }
               }
               style={styles.Image}

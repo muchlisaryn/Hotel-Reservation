@@ -6,13 +6,15 @@ import {PageUndifined} from '../../component/molecules';
 import {useState} from 'react';
 
 export default function Receipt({navigation}) {
-  const [statusOrder, setStatusOrder] = useState(false);
-  const [statusPayment, setStatusPayment] = useState('Sedang di verifikasi');
-  const user = useSelector(state => state?.login?.user);
+  const [statusOrder, setStatusOrder] = useState(true);
+  const [statusPayment, setStatusPayment] = useState('Berhasil di verifikasi');
+  const user = useSelector(state => state.auth.user);
   const bookHistories = useSelector(
     state => state?.bookHistory.bookHistories[user?.username],
   );
 
+  console.log('=> BookHistories', bookHistories);
+  console.log('user', user);
   if (user) {
     return (
       <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
@@ -50,6 +52,7 @@ export default function Receipt({navigation}) {
                     mainImage={item?.mainImage}
                     transaction={item?.transaction_time}
                     statusPayment={statusPayment}
+                    statusOrder={statusOrder}
                   />
                 ))}
               </View>

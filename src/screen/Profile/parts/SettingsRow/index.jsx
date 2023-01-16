@@ -22,7 +22,7 @@ export default function SettingsRow({
   dataEditable,
   keyboardType,
 }) {
-  const user = useSelector(state => state.login.user);
+  const user = useSelector(state => state.auth.user);
   const dispatch = useDispatch();
 
   const [modalVisible, setModalVisible] = useState(false);

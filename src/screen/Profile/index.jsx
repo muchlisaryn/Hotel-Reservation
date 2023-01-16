@@ -42,7 +42,13 @@ export default function Profile({navigation}) {
             <>
               <View style={styles.profileUser}>
                 <Image
-                  source={!user?.image ? DefaultPhoto : {uri: user?.image}}
+                  source={
+                    !user?.image
+                      ? DefaultPhoto
+                      : {
+                          uri: `http://192.168.1.8:8000/${user?.image}`,
+                        }
+                  }
                   style={styles.image}
                 />
                 <View style={{marginTop: 10}}>

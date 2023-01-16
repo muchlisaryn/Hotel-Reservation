@@ -10,7 +10,7 @@ const tomorrow = new Date();
 tomorrow.setDate(tomorrow.getDate() + 1);
 
 export default function Favorite({navigation}) {
-  const user = useSelector(state => state?.login?.user);
+  const user = useSelector(state => state.auth.user);
   const favorites = useSelector(
     state => state?.favorite?.favorites[user?.username],
   );

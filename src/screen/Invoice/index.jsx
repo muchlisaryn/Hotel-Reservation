@@ -14,7 +14,7 @@ import {useState, useEffect} from 'react';
 export default function Invoice({route, navigation}) {
   const [colorStatus, setColorStatus] = useState(colors.yellow);
   const {book_id, afterCheckout, statusOrder, statusPayment} = route.params;
-  const user = useSelector(state => state.login.user);
+  const user = useSelector(state => state.auth.user);
   const bookHistory = useSelector(
     state => state.bookHistory.bookHistories[user.username],
   );

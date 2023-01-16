@@ -36,7 +36,7 @@ export default function HotelCard({
 
   const dispatch = useDispatch();
 
-  const user = useSelector(state => state.login.user);
+  const user = useSelector(state => state.auth.user);
   const favorites = useSelector(
     state => state.favorite.favorites[user?.username],
   );

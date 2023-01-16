@@ -7,8 +7,9 @@ import {Header} from '../../component/molecules';
 import {colors} from '../../utils';
 import {ScrollView} from 'react-native-gesture-handler';
 import {UploadPhoto} from '../../assets/img';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {addBookHistory} from '../../features/bookHistorySlice';
+import axios from 'axios';
 
 export default function Payment({route, navigation}) {
   const {
@@ -27,18 +28,47 @@ export default function Payment({route, navigation}) {
     transaction_time,
   } = route.params;
   const [photo, setPhoto] = useState(null);
+  const [photoPayment, setPhotoPayment] = useState(null);
   const dispatch = useDispatch();
+  const user = useSelector(state => state.auth.user);
+
+  console.log(photoPayment);
+
+  const uploadPayment = () => {
+    let formData = new FormData();
+    formData.append('payment', photoPayment);
+    axios
+      .post(`${process.env.REACT_APP_URL_SERVER}/cms/images/payment`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formData,
+      })
+      .then(res => {
+        console.log('alhamdulilah', res);
+      })
+      .catch(err => {
+        console.log('WHY ?? kok bisa', err);
+      });
+
+    // const res = await axios.post(
+    //   `${process.env.REACT_APP_URL_SERVER}/cms/images`,
+    //   formData,
+    //   true,
+    // );
+    // return res;
+  };
 
   const handleChoosePhoto = () => {
     launchImageLibrary({noData: true}, response => {
-      // console.log(response);
+      console.log('res', response.assets[0]);
       if (response) {
+        setPhotoPayment(response.assets);
         setPhoto(response);
       }
     });
   };
-
-  console.log(photo);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
@@ -115,31 +145,32 @@ export default function Payment({route, navigation}) {
               <Button
                 title="Bayar"
                 color={colors.darkBlue}
-                onPress={() => {
-                  dispatch(
-                    addBookHistory({
-                      username,
-                      data: {
-                        mainImage,
-                        hotel_name,
-                        book_id,
-                        order_id,
-                        stay_length,
-                        checkIn,
-                        checkOut,
-                        person,
-                        room,
-                        name_room,
-                        price,
-                        transaction_time,
-                        photoPayment: photo,
-                      },
-                    }),
-                  );
-                  navigation.navigate('BookingSuccess', {
-                    transaction_time,
-                  });
-                }}
+                onPress={uploadPayment}
+                // onPress={() => {
+                //   dispatch(
+                //     addBookHistory({
+                //       username: user?.username,
+                //       data: {
+                //         mainImage,
+                //         hotel_name,
+                //         book_id,
+                //         order_id,
+                //         stay_length,
+                //         checkIn,
+                //         checkOut,
+                //         person,
+                //         room,
+                //         name_room,
+                //         price,
+                //         transaction_time,
+                //         photoPayment: photo,
+                //       },
+                //     }),
+                //   );
+                //   navigation.navigate('BookingSuccess', {
+                //     transaction_time,
+                //   });
+                // }}
               />
             ) : (
               <Button

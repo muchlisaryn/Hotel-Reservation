@@ -19,7 +19,7 @@ const loginSlice = createSlice({
       state.user[action.payload.prop] = action.payload.value;
     },
   },
-});
+})
 
-export const {setUser, removeLogin, updateUser} = loginSlice.actions;
+export const {setUser, removeLogin, updateUser} = loginSlice.actions
 export default loginSlice.reducer;

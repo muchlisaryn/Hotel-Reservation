@@ -16,9 +16,9 @@ export default function Sign({navigation}) {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const loading = useSelector(state => state.auth.loading);
+  const success = useSelector(state => state.auth.success);
   const user = useSelector(state => state.auth.user);
 
-  console.log('user Pantek =>', user);
   const Login = () => {
     dispatch(
       auth({
@@ -26,9 +26,11 @@ export default function Sign({navigation}) {
         password: password,
       }),
     );
-    navigation.navigate('main', {
-      initial: false,
-    });
+    if (success) {
+      navigation.navigate('main', {
+        initial: false,
+      });
+    }
   };
 
   return (
