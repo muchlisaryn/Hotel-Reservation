@@ -26,47 +26,110 @@ export default function Payment({route, navigation}) {
     name_room,
     price,
     transaction_time,
+    originalDateCheckIn,
+    originalDateCheckOut,
+    hotel_id,
   } = route.params;
   const [photo, setPhoto] = useState(null);
   const [photoPayment, setPhotoPayment] = useState(null);
+  const [idPhoto, setIdPhoto] = useState();
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
 
-  console.log(photoPayment);
+  console.log('id', idPhoto);
 
-  const uploadPayment = () => {
-    let formData = new FormData();
-    formData.append('payment', photoPayment);
-    axios
-      .post(`${process.env.REACT_APP_URL_SERVER}/cms/images/payment`, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
-        },
-        body: formData,
-      })
-      .then(res => {
-        console.log('alhamdulilah', res);
-      })
-      .catch(err => {
-        console.log('WHY ?? kok bisa', err);
-      });
+  let imagePayment = new FormData();
+  imagePayment.append('payment', {
+    uri: photoPayment?.uri,
+    name: photoPayment?.fileName,
+    type: photoPayment?.type,
+  });
 
-    // const res = await axios.post(
-    //   `${process.env.REACT_APP_URL_SERVER}/cms/images`,
-    //   formData,
-    //   true,
+  const uploadPayment = async () => {
+    // let imagePayment = new FormData();
+    // imagePayment.append('payment', {
+    //   uri: photoPayment.uri,
+    //   name: photoPayment.fileName,
+    //   type: photoPayment.type,
+    // });
+    // try {
+    // const res = await fetch(
+    //   `${process.env.REACT_APP_URL_SERVER}/cms/images/payment`,
+    //   {
+    //     method: 'POST',
+    //     body: imagePayment,
+    //   },
     // );
-    // return res;
+    // if (res) {
+    //   console.log('berhasil Upload Payment');
+    //   setIdPhoto(res);
+    // }
+    // const res = await axios({
+    //   method: 'post',
+    //   url: `${process.env.REACT_APP_URL_SERVER}/cms/images/payment`,
+    //   data: imagePayment,
+    //   headers: {'Content-Type': 'multipart/form-data'},
+    // });
+    // if (res.data.data) {
+    //   console.log('berhasil upload bukti pembayaran');
+    //   setIdPhoto(res.data.data._id);
+    // }
+    // try {
+    //   const createOrder = await axios.post(
+    //     `${process.env.REACT_APP_URL_SERVER}/cms/booking`,
+    //     {
+    //       customer: user.id,
+    //       order_id,
+    //       hotel_id,
+    //       hotelName: hotel_name,
+    //       checkIn: originalDateCheckIn,
+    //       checkOut: originalDateCheckOut,
+    //       Total_payment: price,
+    //       image_payment: idPhoto,
+    //       transaction_time: transaction_time,
+    //       statusOrder: false,
+    //       statusPayment: 'Sedang di verifikasi',
+    //     },
+    //   );
+    //   console.log(createOrder);
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
-  const handleChoosePhoto = () => {
-    launchImageLibrary({noData: true}, response => {
-      console.log('res', response.assets[0]);
+  const handleChoosePhoto = async () => {
+    await launchImageLibrary({noData: true}, response => {
       if (response) {
-        setPhotoPayment(response.assets);
+        setPhotoPayment(response.assets[0]);
         setPhoto(response);
       }
+    });
+  };
+
+  console.log(hotel_id);
+
+  const Upload = async () => {
+    const res = await axios({
+      method: 'post',
+      url: `${process.env.REACT_APP_URL_SERVER}/cms/images/payment`,
+      data: imagePayment,
+      headers: {'Content-Type': 'multipart/form-data'},
+    });
+    if (res.data.data) {
+      console.log('berhasil upload bukti pembayaran');
+      setIdPhoto(res.data.data._id);
+    }
+
+    navigation.navigate('BookingSuccess', {
+      customerID: user.id,
+      order_id,
+      hotel_id,
+      hotelName: hotel_name,
+      DateCheckIn: originalDateCheckIn,
+      DateCheckOut: originalDateCheckOut,
+      price,
+      idPhoto,
+      transaction_time,
     });
   };
 
@@ -127,7 +190,7 @@ export default function Payment({route, navigation}) {
 
           <View style={{alignItems: 'center'}}>
             <Pressable onPress={handleChoosePhoto}>
-              {photo?.assets ? (
+              {photoPayment ? (
                 <Image
                   source={{uri: photo?.assets[0]?.uri}}
                   style={styles.imagePayment(photo)}
@@ -145,7 +208,7 @@ export default function Payment({route, navigation}) {
               <Button
                 title="Bayar"
                 color={colors.darkBlue}
-                onPress={uploadPayment}
+                onPress={Upload}
                 // onPress={() => {
                 //   dispatch(
                 //     addBookHistory({

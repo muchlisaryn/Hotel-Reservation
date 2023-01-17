@@ -23,6 +23,7 @@ import {
 import getRoomsSlice from './features/getRoomsSlice';
 import photoHotelSlice from './features/photoHotelSlice';
 import authReducer from './features/authSlice';
+import orderReducer from './features/bookingSlice';
 
 const persistConfig = {
   key: 'root',
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
   rooms: getRoomsSlice,
   photo: photoHotelSlice,
   auth: authReducer,
+  order: orderReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

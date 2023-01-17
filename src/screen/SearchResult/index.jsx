@@ -22,6 +22,9 @@ export default function SearchResult({route, navigation}) {
     formatCheckOut,
     dateCheckIn,
     dateCheckOut,
+    originalDateCheckIn,
+
+    originalDateCheckOut,
   } = route.params;
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -36,7 +39,12 @@ export default function SearchResult({route, navigation}) {
   const [newDateCheckIn, setNewDateCheckIn] = useState(dateCheckIn);
   const [newDateCheckOut, setNewDateCheckOut] = useState(dateCheckOut);
 
-  console.log(newDateCheckIn);
+  console.log(
+    'check In',
+    originalDateCheckIn,
+    'checkOut',
+    originalDateCheckOut,
+  );
 
   useEffect(() => {
     dispatch(
@@ -157,6 +165,8 @@ export default function SearchResult({route, navigation}) {
                     guests: newGuest,
                     rooms: newRooms,
                     image: item?.main_photo_url,
+                    originalDateCheckIn,
+                    originalDateCheckOut,
                   })
                 }
                 hotelId={item?.hotel_id}
@@ -164,7 +174,6 @@ export default function SearchResult({route, navigation}) {
                 hotelName={item?.hotel_name}
                 price={item?.price_breakdown?.all_inclusive_price}
                 address={item?.address}
-                // city={item?.city}
                 reviewScore={item?.review_score}
                 reviewTotal={item?.review_nr}
                 guests={newGuest}

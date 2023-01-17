@@ -21,7 +21,16 @@ import Swiper from 'react-native-swiper';
 import {fetchPhoto} from '../../features/photoHotelSlice';
 
 export default function DetailHotel({route, navigation}) {
-  const {hotel_id, checkIn, checkOut, guests, rooms, image} = route.params;
+  const {
+    hotel_id,
+    checkIn,
+    checkOut,
+    guests,
+    rooms,
+    image,
+    originalDateCheckIn,
+    originalDateCheckOut,
+  } = route.params;
 
   const dispatch = useDispatch();
   const detail = useSelector(state => state.detail.detail);
@@ -36,6 +45,13 @@ export default function DetailHotel({route, navigation}) {
       dispatch(fetchPhoto(route.params));
     }
   }, []);
+
+  console.log(
+    'CheckIn =>',
+    originalDateCheckIn,
+    'checkOut =>',
+    originalDateCheckOut,
+  );
 
   return (
     <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
@@ -168,6 +184,8 @@ export default function DetailHotel({route, navigation}) {
                   guests: guests,
                   rooms: rooms,
                   image,
+                  originalDateCheckIn,
+                  originalDateCheckOut,
                 })
               }
               title="Pilih Kamar"

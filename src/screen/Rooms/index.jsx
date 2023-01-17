@@ -6,7 +6,16 @@ import {useDispatch, useSelector} from 'react-redux';
 import {fetchRooms} from '../../features/getRoomsSlice';
 
 export default function Rooms({route, navigation}) {
-  const {hotel_id, checkOut, checkIn, guests, rooms, image} = route.params;
+  const {
+    hotel_id,
+    checkOut,
+    checkIn,
+    guests,
+    rooms,
+    image,
+    originalDateCheckIn,
+    originalDateCheckOut,
+  } = route.params;
   const room = useSelector(state => state.rooms.rooms);
   const isPending = useSelector(state => state.rooms.isPending);
   const dispatch = useDispatch();
@@ -16,6 +25,8 @@ export default function Rooms({route, navigation}) {
       dispatch(fetchRooms(route.params));
     }
   }, []);
+
+  console.log(originalDateCheckIn, originalDateCheckOut);
 
   return (
     <SafeAreaView style={styles.page}>
@@ -59,6 +70,8 @@ export default function Rooms({route, navigation}) {
                   image: room.rooms[item?.room_id].photos,
                   mainImage: image,
                   detail_room: room.rooms[item?.room_id],
+                  originalDateCheckIn,
+                  originalDateCheckOut,
                 })
               }
             />

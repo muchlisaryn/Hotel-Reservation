@@ -3,7 +3,6 @@ import React, {useState, useEffect} from 'react';
 import Input from '../../component/atoms/Input';
 import Button from '../../component/atoms/Button';
 import {useDispatch, useSelector} from 'react-redux';
-
 import {colors} from '../../utils';
 import Header from '../../component/molecules/Header';
 import {Gap} from '../../component/atoms';
@@ -26,12 +25,15 @@ export default function Sign({navigation}) {
         password: password,
       }),
     );
+  };
+
+  useEffect(() => {
     if (success) {
       navigation.navigate('main', {
         initial: false,
       });
     }
-  };
+  });
 
   return (
     <View style={styles.page}>

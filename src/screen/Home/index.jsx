@@ -24,8 +24,17 @@ export default function Home({navigation}) {
   const [openCheckin, setOpenCheckin] = useState(false);
   const [openCheckout, setOpenCheckout] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [originalDateCheckIn, setOriginalDateCheckIn] = useState();
+  const [originalDateCheckOut, setOriginalDateCheckOut] = useState();
   const [guest, setGuest] = useState(1);
   const [room, setRoom] = useState(1);
+
+  console.log(
+    'checkIn ',
+    originalDateCheckIn,
+    'checkout => ',
+    originalDateCheckOut,
+  );
 
   const checkOutButton = () => {
     if (inputCheckIn) {
@@ -59,6 +68,8 @@ export default function Home({navigation}) {
         checkOut: inputCheckOut,
         guests: guest,
         rooms: room,
+        originalDateCheckIn,
+        originalDateCheckOut,
       });
     } else if (input === '') {
       alert('Form input wajib di isi');
@@ -106,6 +117,7 @@ export default function Home({navigation}) {
                       if (event.type == 'set') {
                         setOpenCheckin(false);
                         setInputCheckIn(formatDate(selectedDate));
+                        setOriginalDateCheckIn(selectedDate);
                         setCheckIn(selectedDate.toLocaleDateString('pt-PT'));
                         const date = String(selectedDate.getDate());
                         const month = shortMonth.format(selectedDate);
@@ -140,6 +152,7 @@ export default function Home({navigation}) {
                       if (event.type == 'set') {
                         setOpenCheckout(false);
                         setInputCheckOut(formatDate(selectedDate));
+                        setOriginalDateCheckOut(selectedDate);
                         setCheckOut(selectedDate.toLocaleDateString('pt-PT'));
                         const month = shortMonth.format(new Date(selectedDate));
                         const day = String(selectedDate.getDate());

@@ -19,6 +19,7 @@ import {
   SignUp,
   Payment,
   DataDiri,
+  OrderProcess,
 } from '../screen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -102,6 +103,7 @@ const Router = () => {
         component={SuccessLogin}
         options={{headerShown: false}}
       />
+
       <Stack.Screen
         name="Splash"
         component={Splash}

@@ -24,8 +24,13 @@ export default function DetailRoom({route, navigation}) {
     checkOut,
     detail_room,
     mainImage,
+    originalDateCheckIn,
+    originalDateCheckOut,
   } = route.params;
   const user = useSelector(state => state.auth.user);
+  const totalPrice = price * room;
+
+  console.log(originalDateCheckIn, originalDateCheckOut);
 
   return (
     <SafeAreaView style={styles.page}>
@@ -56,7 +61,9 @@ export default function DetailRoom({route, navigation}) {
                   icon={'person-outline'}
                   size={15}
                 />
-                <Text style={{color: colors.darkGrey}}>{person} Guest</Text>
+                <Text style={{color: colors.darkGrey, marginLeft: 5}}>
+                  {person} Guest
+                </Text>
               </View>
               <Text style={{marginHorizontal: 10}}>|</Text>
               <View style={{flexDirection: 'row'}}>
@@ -66,7 +73,9 @@ export default function DetailRoom({route, navigation}) {
                   icon={'bed-outline'}
                   size={18}
                 />
-                <Text style={{color: colors.darkGrey}}>{bed_type}</Text>
+                <Text style={{color: colors.darkGrey, marginLeft: 5}}>
+                  {bed_type}
+                </Text>
               </View>
             </View>
           </View>
@@ -109,7 +118,7 @@ export default function DetailRoom({route, navigation}) {
               fontWeight: 'bold',
               fontSize: 15,
             }}>
-            {formatIDR.format(price)}
+            {formatIDR.format(totalPrice)}
             <Text
               style={{
                 color: colors.white,
@@ -146,6 +155,8 @@ export default function DetailRoom({route, navigation}) {
                   name_room: name_room,
                   image: image[1]?.url_original,
                   mainImage,
+                  originalDateCheckIn,
+                  originalDateCheckOut,
                 })
               : navigation.navigate('Sign');
           }}

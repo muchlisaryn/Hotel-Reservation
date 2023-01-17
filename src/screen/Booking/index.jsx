@@ -48,6 +48,8 @@ export default function Booking({route, navigation}) {
     name_room,
     image,
     mainImage,
+    originalDateCheckIn,
+    originalDateCheckOut,
   } = route.params;
 
   const user = useSelector(state => state.auth.user);
@@ -58,6 +60,8 @@ export default function Booking({route, navigation}) {
   );
   const [email, setEmail] = useState(user.email);
   const [telephone, setTelephone] = useState(user.telephone);
+
+  console.log(originalDateCheckIn, originalDateCheckOut);
 
   return (
     <SafeAreaView style={styles.page}>
@@ -156,6 +160,8 @@ export default function Booking({route, navigation}) {
                 name_room,
                 price: formatIDR.format(price * room),
                 transaction_time: convertDate(date),
+                originalDateCheckIn,
+                originalDateCheckOut,
               });
             }}
           />
