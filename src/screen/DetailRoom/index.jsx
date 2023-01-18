@@ -26,6 +26,7 @@ export default function DetailRoom({route, navigation}) {
     mainImage,
     originalDateCheckIn,
     originalDateCheckOut,
+    hotel_id
   } = route.params;
   const user = useSelector(state => state.auth.user);
   const totalPrice = price * room;
@@ -157,6 +158,7 @@ export default function DetailRoom({route, navigation}) {
                   mainImage,
                   originalDateCheckIn,
                   originalDateCheckOut,
+                  hotel_id
                 })
               : navigation.navigate('Sign');
           }}

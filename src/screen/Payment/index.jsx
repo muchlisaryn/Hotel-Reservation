@@ -1,5 +1,5 @@
 import {View, Text, Image, Platform, StyleSheet, Pressable} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Button} from '../../component/atoms';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -10,6 +10,7 @@ import {UploadPhoto} from '../../assets/img';
 import {useDispatch, useSelector} from 'react-redux';
 import {addBookHistory} from '../../features/bookHistorySlice';
 import axios from 'axios';
+import {createImage} from '../../features/createImageSlice';
 
 export default function Payment({route, navigation}) {
   const {
@@ -32,70 +33,12 @@ export default function Payment({route, navigation}) {
   } = route.params;
   const [photo, setPhoto] = useState(null);
   const [photoPayment, setPhotoPayment] = useState(null);
-  const [idPhoto, setIdPhoto] = useState();
+
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
-
-  console.log('id', idPhoto);
-
-  let imagePayment = new FormData();
-  imagePayment.append('payment', {
-    uri: photoPayment?.uri,
-    name: photoPayment?.fileName,
-    type: photoPayment?.type,
-  });
-
-  const uploadPayment = async () => {
-    // let imagePayment = new FormData();
-    // imagePayment.append('payment', {
-    //   uri: photoPayment.uri,
-    //   name: photoPayment.fileName,
-    //   type: photoPayment.type,
-    // });
-    // try {
-    // const res = await fetch(
-    //   `${process.env.REACT_APP_URL_SERVER}/cms/images/payment`,
-    //   {
-    //     method: 'POST',
-    //     body: imagePayment,
-    //   },
-    // );
-    // if (res) {
-    //   console.log('berhasil Upload Payment');
-    //   setIdPhoto(res);
-    // }
-    // const res = await axios({
-    //   method: 'post',
-    //   url: `${process.env.REACT_APP_URL_SERVER}/cms/images/payment`,
-    //   data: imagePayment,
-    //   headers: {'Content-Type': 'multipart/form-data'},
-    // });
-    // if (res.data.data) {
-    //   console.log('berhasil upload bukti pembayaran');
-    //   setIdPhoto(res.data.data._id);
-    // }
-    // try {
-    //   const createOrder = await axios.post(
-    //     `${process.env.REACT_APP_URL_SERVER}/cms/booking`,
-    //     {
-    //       customer: user.id,
-    //       order_id,
-    //       hotel_id,
-    //       hotelName: hotel_name,
-    //       checkIn: originalDateCheckIn,
-    //       checkOut: originalDateCheckOut,
-    //       Total_payment: price,
-    //       image_payment: idPhoto,
-    //       transaction_time: transaction_time,
-    //       statusOrder: false,
-    //       statusPayment: 'Sedang di verifikasi',
-    //     },
-    //   );
-    //   console.log(createOrder);
-    // } catch (err) {
-    //   console.log(err);
-    // }
-  };
+  const success = useSelector(state => state.imageId.success);
+  console.log(success);
+  const idImage = useSelector(state => state.imageId.imageId);
 
   const handleChoosePhoto = async () => {
     await launchImageLibrary({noData: true}, response => {
@@ -106,32 +49,29 @@ export default function Payment({route, navigation}) {
     });
   };
 
-  console.log(hotel_id);
-
   const Upload = async () => {
-    const res = await axios({
-      method: 'post',
-      url: `${process.env.REACT_APP_URL_SERVER}/cms/images/payment`,
-      data: imagePayment,
-      headers: {'Content-Type': 'multipart/form-data'},
-    });
-    if (res.data.data) {
-      console.log('berhasil upload bukti pembayaran');
-      setIdPhoto(res.data.data._id);
-    }
-
-    navigation.navigate('BookingSuccess', {
-      customerID: user.id,
-      order_id,
-      hotel_id,
-      hotelName: hotel_name,
-      DateCheckIn: originalDateCheckIn,
-      DateCheckOut: originalDateCheckOut,
-      price,
-      idPhoto,
-      transaction_time,
-    });
+    dispatch(createImage({photoPayment}));
   };
+
+  useEffect(() => {
+    if (success) {
+      navigation.navigate('BookingSuccess', {
+        customerID: user.id,
+        order_id,
+        hotel_id,
+        codeBooking: book_id,
+        countRoom: room,
+        countPerson: person,
+        name_room,
+        hotelName: hotel_name,
+        DateCheckIn: originalDateCheckIn,
+        DateCheckOut: originalDateCheckOut,
+        price,
+        imagePayment: idImage,
+        transaction_time,
+      });
+    }
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>

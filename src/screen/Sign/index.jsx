@@ -21,8 +21,8 @@ export default function Sign({navigation}) {
   const Login = () => {
     dispatch(
       auth({
-        email: email,
-        password: password,
+        email,
+        password,
       }),
     );
   };

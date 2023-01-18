@@ -13,6 +13,7 @@ export default function Rooms({route, navigation}) {
     guests,
     rooms,
     image,
+    
     originalDateCheckIn,
     originalDateCheckOut,
   } = route.params;
@@ -72,6 +73,7 @@ export default function Rooms({route, navigation}) {
                   detail_room: room.rooms[item?.room_id],
                   originalDateCheckIn,
                   originalDateCheckOut,
+                  hotel_id
                 })
               }
             />

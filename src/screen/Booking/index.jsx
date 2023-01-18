@@ -50,6 +50,7 @@ export default function Booking({route, navigation}) {
     mainImage,
     originalDateCheckIn,
     originalDateCheckOut,
+    hotel_id
   } = route.params;
 
   const user = useSelector(state => state.auth.user);
@@ -162,6 +163,7 @@ export default function Booking({route, navigation}) {
                 transaction_time: convertDate(date),
                 originalDateCheckIn,
                 originalDateCheckOut,
+                hotel_id
               });
             }}
           />

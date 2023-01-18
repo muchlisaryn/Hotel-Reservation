@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React, {useEffect} from 'react';
 import {Button} from '../../component/atoms';
-import {Ilustration2} from '../../assets/img';
+import {ErrorIlustration, Ilustration2} from '../../assets/img';
 import {colors} from '../../utils';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
@@ -11,15 +11,20 @@ export default function BookingSuccess({route, navigation}) {
   const dispatch = useDispatch();
   const loading = useSelector(state => state.order.loading);
   const error = useSelector(state => state.order.error);
+
   const {
     customerID,
     order_id,
     hotel_id,
+    codeBooking,
+    countRoom,
+    countPerson,
+    name_room,
     hotelName,
     DateCheckIn,
     DateCheckOut,
     price,
-    idPhoto,
+    imagePayment,
     transaction_time,
   } = route.params;
 
@@ -31,11 +36,15 @@ export default function BookingSuccess({route, navigation}) {
         customerID,
         order_id,
         hotel_id,
+        codeBooking,
+        countRoom,
+        countPerson,
+        name_room,
         hotelName,
         DateCheckIn,
         DateCheckOut,
         price,
-        idPhoto,
+        imagePayment,
         transaction_time,
       }),
     );
@@ -45,10 +54,12 @@ export default function BookingSuccess({route, navigation}) {
     return (
       <View style={styles.page}>
         <View style={styles.container}>
-          <Ilustration2 />
+          <ErrorIlustration />
           <View style={{marginVertical: 15}}>
-            <Text style={styles.title}>Booking gagal</Text>
-            <Text style={styles.description}>erorr</Text>
+            <Text style={styles.title}>Sorry Booking Failed</Text>
+            <Text style={styles.description}>
+              Server error Please try again later.
+            </Text>
           </View>
         </View>
         <Button
@@ -65,14 +76,9 @@ export default function BookingSuccess({route, navigation}) {
       <View style={styles.page}>
         <View style={styles.container}>
           <View style={{marginVertical: 15}}>
-            <Text style={styles.title}>Loading...</Text>
+            <Text>Loading...</Text>
           </View>
         </View>
-        <Button
-          title="Back to home"
-          onPress={() => navigation.navigate('Home')}
-          color={colors.yellow}
-        />
       </View>
     );
   }

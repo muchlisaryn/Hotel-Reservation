@@ -9,6 +9,7 @@ import HotelNotFound from './HotelNotFound.png';
 import Empty from './Empty.png';
 import DefaultPhoto from './default.png';
 import BtnAddPhoto from './btn_add_photo.svg';
+import ErrorIlustration from './Error.svg';
 
 export {
   DefaultPhoto,
@@ -22,4 +23,5 @@ export {
   HotelNotFound,
   Empty,
   BtnAddPhoto,
+  ErrorIlustration,
 };

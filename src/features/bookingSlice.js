@@ -8,11 +8,15 @@ const initialState = {
   success: false,
 };
 
-export const order = createAsyncThunk('auth/authUser', async props => {
+export const order = createAsyncThunk('booking/bookingOrder', async props => {
   const {
     customerID,
     order_id,
     hotel_id,
+    codeBooking,
+    countRoom,
+    countPerson,
+    name_room,
     hotelName,
     DateCheckIn,
     DateCheckOut,
@@ -27,6 +31,10 @@ export const order = createAsyncThunk('auth/authUser', async props => {
         customer: customerID,
         order_id: order_id,
         hotel_id: hotel_id,
+        codeBooking,
+        countRoom,
+        countPerson,
+        name_room,
         hotelName: hotelName,
         checkIn: DateCheckIn,
         checkOut: DateCheckOut,
