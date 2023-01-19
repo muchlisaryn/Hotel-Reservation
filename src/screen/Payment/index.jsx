@@ -8,21 +8,15 @@ import {colors} from '../../utils';
 import {ScrollView} from 'react-native-gesture-handler';
 import {UploadPhoto} from '../../assets/img';
 import {useDispatch, useSelector} from 'react-redux';
-import {addBookHistory} from '../../features/bookHistorySlice';
-import axios from 'axios';
 import {createImage} from '../../features/createImageSlice';
 
 export default function Payment({route, navigation}) {
   const {
-    username,
-    mainImage,
     hotel_name,
     book_id,
     order_id,
-    stay_length,
-    checkIn,
-    checkOut,
     person,
+    guest,
     room,
     name_room,
     price,
@@ -36,12 +30,12 @@ export default function Payment({route, navigation}) {
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
-  const success = useSelector(state => state.imageId.success);
-  console.log(success);
+  const loading = useSelector(state => state.imageId.loading);
   const idImage = useSelector(state => state.imageId.imageId);
+  console.log(idImage);
 
-  const handleChoosePhoto = async () => {
-    await launchImageLibrary({noData: true}, response => {
+  const handleChoosePhoto = () => {
+    launchImageLibrary({noData: true}, response => {
       if (response) {
         setPhotoPayment(response.assets[0]);
         setPhoto(response);
@@ -49,29 +43,25 @@ export default function Payment({route, navigation}) {
     });
   };
 
-  const Upload = async () => {
+  const Upload = () => {
     dispatch(createImage({photoPayment}));
+    navigation.navigate('BookingSuccess', {
+      customerID: user.id,
+      guest,
+      order_id,
+      hotel_id,
+      codeBooking: book_id,
+      countRoom: room,
+      countPerson: person,
+      name_room,
+      hotelName: hotel_name,
+      DateCheckIn: originalDateCheckIn,
+      DateCheckOut: originalDateCheckOut,
+      price,
+      imagePayment: idImage,
+      transaction_time,
+    });
   };
-
-  useEffect(() => {
-    if (success) {
-      navigation.navigate('BookingSuccess', {
-        customerID: user.id,
-        order_id,
-        hotel_id,
-        codeBooking: book_id,
-        countRoom: room,
-        countPerson: person,
-        name_room,
-        hotelName: hotel_name,
-        DateCheckIn: originalDateCheckIn,
-        DateCheckOut: originalDateCheckOut,
-        price,
-        imagePayment: idImage,
-        transaction_time,
-      });
-    }
-  }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
@@ -146,34 +136,9 @@ export default function Payment({route, navigation}) {
           <View style={{marginVertical: 20}}>
             {photo?.assets ? (
               <Button
-                title="Bayar"
+                title={loading ? 'Loading...' : 'bayar'}
                 color={colors.darkBlue}
                 onPress={Upload}
-                // onPress={() => {
-                //   dispatch(
-                //     addBookHistory({
-                //       username: user?.username,
-                //       data: {
-                //         mainImage,
-                //         hotel_name,
-                //         book_id,
-                //         order_id,
-                //         stay_length,
-                //         checkIn,
-                //         checkOut,
-                //         person,
-                //         room,
-                //         name_room,
-                //         price,
-                //         transaction_time,
-                //         photoPayment: photo,
-                //       },
-                //     }),
-                //   );
-                //   navigation.navigate('BookingSuccess', {
-                //     transaction_time,
-                //   });
-                // }}
               />
             ) : (
               <Button

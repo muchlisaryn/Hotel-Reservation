@@ -34,3 +34,7 @@ export const formatDate = date => {
   }
   return [year, month, day].join('-');
 };
+
+export const localDate = date => {
+  date.toLocaleDateString('pt-PT');
+};

@@ -11,6 +11,7 @@ const initialState = {
 export const order = createAsyncThunk('booking/bookingOrder', async props => {
   const {
     customerID,
+    guest,
     order_id,
     hotel_id,
     codeBooking,
@@ -21,6 +22,7 @@ export const order = createAsyncThunk('booking/bookingOrder', async props => {
     DateCheckIn,
     DateCheckOut,
     price,
+    charge_pay,
     imagePayment,
     transaction_time,
   } = props;
@@ -29,6 +31,7 @@ export const order = createAsyncThunk('booking/bookingOrder', async props => {
       `${process.env.REACT_APP_URL_SERVER}/cms/booking`,
       {
         customer: customerID,
+        guest,
         order_id: order_id,
         hotel_id: hotel_id,
         codeBooking,
@@ -39,6 +42,7 @@ export const order = createAsyncThunk('booking/bookingOrder', async props => {
         checkIn: DateCheckIn,
         checkOut: DateCheckOut,
         Total_payment: price,
+        charge_pay,
         image_payment: imagePayment,
         transaction_time: transaction_time,
         statusOrder: false,

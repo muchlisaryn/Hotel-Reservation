@@ -42,7 +42,6 @@ export const fetchHotels = createAsyncThunk(
         },
         headers,
       });
-
       return [responseHotels.data.result, responseHotels.data.search_id];
     } catch (e) {
       throw e;

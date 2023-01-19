@@ -3,7 +3,6 @@ import React, {useEffect} from 'react';
 import {Button} from '../../component/atoms';
 import {ErrorIlustration, Ilustration2} from '../../assets/img';
 import {colors} from '../../utils';
-import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {order} from '../../features/bookingSlice';
 
@@ -14,6 +13,7 @@ export default function BookingSuccess({route, navigation}) {
 
   const {
     customerID,
+    guest,
     order_id,
     hotel_id,
     codeBooking,
@@ -34,6 +34,7 @@ export default function BookingSuccess({route, navigation}) {
     dispatch(
       order({
         customerID,
+        guest,
         order_id,
         hotel_id,
         codeBooking,
@@ -44,6 +45,7 @@ export default function BookingSuccess({route, navigation}) {
         DateCheckIn,
         DateCheckOut,
         price,
+        charge_pay: price,
         imagePayment,
         transaction_time,
       }),

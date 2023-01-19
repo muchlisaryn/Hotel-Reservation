@@ -1,17 +1,7 @@
 import {useState} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-  FlatList,
-  Image,
-  Pressable,
-} from 'react-native';
+import {StyleSheet, Text, View, Pressable} from 'react-native';
 import {colors} from '../../../utils';
+import {convertDate} from '../../../utils/formatDate';
 
 export default function BookHistoryCard({
   onPress,
@@ -20,13 +10,10 @@ export default function BookHistoryCard({
   checkIn,
   checkOut,
   price,
-  mainImage,
   transaction,
   statusOrder,
   statusPayment,
 }) {
-  const imageResize = mainImage?.replace('square60', 'max500');
-
   return (
     <View style={styles.container}>
       <Pressable
@@ -34,19 +21,18 @@ export default function BookHistoryCard({
           {backgroundColor: pressed ? '#e5e5e5' : 'white', borderRadius: 10},
         ]}
         onPress={onPress}>
-        <Image
-          source={{
-            uri: imageResize,
-          }}
-          style={styles.img}
-        />
         <View style={styles.transactionDate}>
           <Text style={{color: colors.white}}>
             Transaction Date {transaction}
           </Text>
         </View>
         <View style={{padding: 10}}>
-          <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+          <View
+            style={{
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              paddingTop: 22,
+            }}>
             <View>
               <Text numberOfLines={2} style={styles.name}>
                 {hotel_name}
@@ -59,10 +45,12 @@ export default function BookHistoryCard({
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text
               style={{color: colors.darkGrey, fontSize: 12, fontWeight: '400'}}>
-              {checkIn} - {checkOut} ({stay_length} days)
+              {convertDate(checkIn)} - {convertDate(checkOut)} ({stay_length}{' '}
+              days)
             </Text>
+
             {statusPayment === 'Sedang di verifikasi' ? (
-              <Text>Sedang di verifikasi</Text>
+              <Text>{statusPayment}</Text>
             ) : (
               <>
                 {statusOrder ? (

@@ -20,8 +20,8 @@ export default function Profile({navigation}) {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
   const favorites = useSelector(state => state?.favorite?.favorites);
-  const bookHistories = useSelector(state => state?.bookHistory?.bookHistories);
   const [modalVisible, setModalVisible] = useState(false);
+  const order = useSelector(state => state.allOrder.allOrder);
 
   return (
     <SafeAreaView style={styles.page}>
@@ -64,7 +64,7 @@ export default function Profile({navigation}) {
                     <Text
                       style={styles.totalActivity}
                       onPress={() => navigation.navigate('Receipt')}>
-                      {bookHistories[user?.username]?.length || 0}
+                      {order.length || 0}
                     </Text>
                     <Text style={styles.titleActivity}>Booking</Text>
                   </View>

@@ -1,20 +1,22 @@
 import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {colors} from '../../utils';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import BookHistoryCard from '../../component/molecules/BookHistoryCard';
 import {PageUndifined} from '../../component/molecules';
 import {useState} from 'react';
+import {fetchOrder} from '../../features/orderHistorySlice';
+import {useEffect} from 'react';
+import {convertDate, lengthOfDay, localDate} from '../../utils/formatDate';
 
 export default function Receipt({navigation}) {
-  const [statusOrder, setStatusOrder] = useState(true);
-  const [statusPayment, setStatusPayment] = useState('Berhasil di verifikasi');
+  const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
-  const bookHistories = useSelector(
-    state => state?.bookHistory.bookHistories[user?.username],
-  );
+  const order = useSelector(state => state.allOrder.allOrder);
 
-  console.log('=> BookHistories', bookHistories);
-  console.log('user', user);
+  useEffect(() => {
+    dispatch(fetchOrder());
+  }, []);
+
   if (user) {
     return (
       <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
@@ -29,30 +31,30 @@ export default function Receipt({navigation}) {
             Riwayat Transaksi
           </Text>
         </View>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <View style={styles.page}>
-            {bookHistories ? (
+            {order ? (
               <View style={{padding: 20}}>
-                {bookHistories?.map(item => (
+                {order?.map(item => (
                   <BookHistoryCard
-                    key={item?.book_id}
                     onPress={() =>
                       navigation.navigate('Invoice', {
-                        book_id: item?.book_id,
-                        afterCheckout: false,
-                        statusOrder,
-                        statusPayment,
+                        id: item?._id,
+                        statusOrder: item?.statusOrder,
+                        statusPayment: item?.statusPayment,
+                        checkIn: convertDate(item?.checkIn),
+                        checkOut: convertDate(item?.checkOut),
                       })
                     }
-                    hotel_name={item?.hotel_name}
-                    stay_length={item?.stay_length}
+                    transaction={item?.transaction_time}
+                    statusPayment={item?.statusPayment}
+                    price={item?.Total_payment}
+                    hotel_name={item?.hotelName}
                     checkIn={item?.checkIn}
                     checkOut={item?.checkOut}
-                    price={item?.price}
-                    mainImage={item?.mainImage}
-                    transaction={item?.transaction_time}
-                    statusPayment={statusPayment}
-                    statusOrder={statusOrder}
                   />
                 ))}
               </View>

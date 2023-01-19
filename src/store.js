@@ -25,17 +25,28 @@ import photoHotelSlice from './features/photoHotelSlice';
 import authReducer from './features/authSlice';
 import orderReducer from './features/bookingSlice';
 import imageReducer from './features/createImageSlice';
+import allOrderReducer from './features/orderHistorySlice';
+import oneOrderReducer from './features/getOneBooking';
+import guestReducer from './features/guestSlice';
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage: AsyncStorage,
-  blacklist: ['hotel', 'review', 'detail', 'rooms'],
+  blacklist: [
+    'hotel',
+    'review',
+    'detail',
+    'rooms',
+    'imageId',
+    'order',
+    'allOrder',
+    'guestSlice',
+  ],
 };
 
 const rootReducer = combineReducers({
   favorite: favoriteReducer,
-  bookHistory: bookHistoryReducer,
   login: loginReducer,
   hotel: hotelReducer,
   review: ReviewSlice,
@@ -45,6 +56,9 @@ const rootReducer = combineReducers({
   auth: authReducer,
   order: orderReducer,
   imageId: imageReducer,
+  allOrder: allOrderReducer,
+  oneOrder: oneOrderReducer,
+  guest: guestReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

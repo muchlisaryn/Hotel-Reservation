@@ -8,18 +8,21 @@ import {
 } from 'react-native';
 import {colors} from '../../utils';
 import {Header} from '../../component/molecules';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useState, useEffect} from 'react';
+import {fetchOrderOne} from '../../features/getOneBooking';
+import {lengthOfDay} from '../../utils/formatDate';
+import ModalShowPayment from './modalShowPayment';
 
 export default function Invoice({route, navigation}) {
   const [colorStatus, setColorStatus] = useState(colors.yellow);
-  const {book_id, afterCheckout, statusOrder, statusPayment} = route.params;
-  const user = useSelector(state => state.auth.user);
-  const bookHistory = useSelector(
-    state => state.bookHistory.bookHistories[user.username],
-  );
-  const bookHistoryById = bookHistory.find(item => item.book_id === book_id);
-  const imageResize = img => img?.replace('square60', 'max500');
+  const {statusOrder, statusPayment, id, checkIn, checkOut} = route.params;
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const order = useSelector(state => state.oneOrder.order);
+
+  console.log('order', order);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (statusPayment === 'Sedang di verifikasi') {
@@ -31,27 +34,26 @@ export default function Invoice({route, navigation}) {
     }
   }, []);
 
+  useEffect(() => {
+    dispatch(fetchOrderOne(id));
+  }, []);
+
+  const dateCheckIn = Number(checkIn);
+  const dateCheckOut = Number(checkOut);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{padding: 20, backgroundColor: colors.darkBlue}}>
         <Header
-          title={`Order ID : #${bookHistoryById.order_id}`}
-          onPress={() =>
-            afterCheckout ? navigation.navigate('main') : navigation.goBack()
-          }
+          title={`Order ID : # ${order?.order_id}`}
+          onPress={() => navigation.goBack()}
         />
       </View>
       <ScrollView>
         <View>
-          <Image
-            source={{
-              uri: imageResize(bookHistoryById.mainImage),
-            }}
-            style={styles.img}
-          />
           <View style={{padding: 15}}>
             <Text numberOfLines={2} style={styles.textHeader}>
-              {bookHistoryById.hotel_name}
+              {order?.hotelName}
             </Text>
 
             {statusOrder ? (
@@ -66,9 +68,7 @@ export default function Invoice({route, navigation}) {
                     borderRadius: 10,
                   }}>
                   <Text style={styles.text(colors.white)}>Booking ID:</Text>
-                  <Text style={styles.invoiceId}>
-                    {bookHistoryById.book_id}
-                  </Text>
+                  <Text style={styles.invoiceId}>invoice</Text>
                 </View>
               </>
             ) : (
@@ -88,7 +88,7 @@ export default function Invoice({route, navigation}) {
                     styles.text(colors.black),
                     {flex: 1, textAlign: 'right', color: colors.black},
                   ]}>
-                  {bookHistoryById.transaction_time}
+                  {order?.transaction_time}
                 </Text>
               </View>
 
@@ -99,7 +99,7 @@ export default function Invoice({route, navigation}) {
                     styles.text(colors.black),
                     {flex: 1, textAlign: 'right', fontWeight: '800'},
                   ]}>
-                  {bookHistoryById.price}
+                  {order?.Total_payment}
                 </Text>
               </View>
 
@@ -108,6 +108,7 @@ export default function Invoice({route, navigation}) {
                   Bukti Pembayaran
                 </Text>
                 <Text
+                  onPress={() => setModalVisible(true)}
                   style={[
                     styles.text(colors.darkBlue),
                     {
@@ -145,8 +146,8 @@ export default function Invoice({route, navigation}) {
                     styles.text(colors.black),
                     {flex: 1, textAlign: 'right'},
                   ]}>
-                  {bookHistoryById.checkIn} - {bookHistoryById.checkOut}{' '}
-                  {`(${bookHistoryById.stay_length} Days)`}
+                  {checkIn} - {checkOut}{' '}
+                  {`(${lengthOfDay(dateCheckIn, dateCheckOut)} Days)`}
                 </Text>
               </View>
 
@@ -159,7 +160,7 @@ export default function Invoice({route, navigation}) {
                     styles.text(colors.black),
                     {flex: 1, textAlign: 'right'},
                   ]}>
-                  {bookHistoryById.person} Orang | {bookHistoryById.room} Kamar
+                  {order?.countPerson} Orang | {order?.countRoom} Kamar
                 </Text>
               </View>
 
@@ -168,13 +169,21 @@ export default function Invoice({route, navigation}) {
                 <Text
                   style={[
                     styles.text(colors.black),
-                    {flex: 1, textAlign: 'right'},
+                    {flex: 1, textAlign: 'right', paddingStart: 2},
                   ]}>
-                  {bookHistoryById.name_room}
+                  {order?.name_room}
                 </Text>
               </View>
             </View>
           </View>
+          <ModalShowPayment
+            visible={modalVisible}
+            imagePay={order.image_payment.name}
+            onPressCancel={() => {
+              setModalVisible(false);
+            }}
+            onRequestClose={() => setModalVisible(!modalVisible)}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -202,6 +211,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '600',
     marginBottom: 10,
+    textAlign: 'center',
   },
   rowContainer: {
     flexDirection: 'row',
