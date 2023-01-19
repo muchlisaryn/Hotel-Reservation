@@ -1,4 +1,4 @@
-import {View, Text, Image, Platform, StyleSheet, Pressable} from 'react-native';
+import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {Button} from '../../component/atoms';
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -8,7 +8,8 @@ import {colors} from '../../utils';
 import {ScrollView} from 'react-native-gesture-handler';
 import {UploadPhoto} from '../../assets/img';
 import {useDispatch, useSelector} from 'react-redux';
-import {createImage} from '../../features/createImageSlice';
+import {createImage, deleteId} from '../../features/createImageSlice';
+import axios from 'axios';
 
 export default function Payment({route, navigation}) {
   const {
@@ -30,9 +31,8 @@ export default function Payment({route, navigation}) {
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
-  const loading = useSelector(state => state.imageId.loading);
-  const idImage = useSelector(state => state.imageId.imageId);
-  console.log(idImage);
+  const [idImage, setIdImage] = useState('');
+  console.log('image', idImage);
 
   const handleChoosePhoto = () => {
     launchImageLibrary({noData: true}, response => {
@@ -43,25 +43,43 @@ export default function Payment({route, navigation}) {
     });
   };
 
-  const Upload = () => {
-    dispatch(createImage({photoPayment}));
-    navigation.navigate('BookingSuccess', {
-      customerID: user.id,
-      guest,
-      order_id,
-      hotel_id,
-      codeBooking: book_id,
-      countRoom: room,
-      countPerson: person,
-      name_room,
-      hotelName: hotel_name,
-      DateCheckIn: originalDateCheckIn,
-      DateCheckOut: originalDateCheckOut,
-      price,
-      imagePayment: idImage,
-      transaction_time,
+  const Upload = async () => {
+    let imagePayment = new FormData();
+    imagePayment.append('payment', {
+      uri: photoPayment?.uri,
+      name: photoPayment?.fileName,
+      type: photoPayment?.type,
     });
+
+    const res = await axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_URL_SERVER}/cms/images/payment`,
+      data: imagePayment,
+      headers: {'Content-Type': 'multipart/form-data'},
+    });
+    setIdImage(res.data.data._id);
   };
+
+  useEffect(() => {
+    if (idImage?.length) {
+      navigation.navigate('BookingSuccess', {
+        customerID: user.id,
+        guest,
+        order_id,
+        hotel_id,
+        codeBooking: book_id,
+        countRoom: room,
+        countPerson: person,
+        name_room,
+        hotelName: hotel_name,
+        DateCheckIn: originalDateCheckIn,
+        DateCheckOut: originalDateCheckOut,
+        price,
+        imagePayment: idImage,
+        transaction_time,
+      });
+    }
+  });
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
@@ -135,11 +153,7 @@ export default function Payment({route, navigation}) {
           </View>
           <View style={{marginVertical: 20}}>
             {photo?.assets ? (
-              <Button
-                title={loading ? 'Loading...' : 'bayar'}
-                color={colors.darkBlue}
-                onPress={Upload}
-              />
+              <Button title="bayar" color={colors.darkBlue} onPress={Upload} />
             ) : (
               <Button
                 title="Upload Bukti Pembayaran"

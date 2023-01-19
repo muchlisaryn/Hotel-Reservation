@@ -1,11 +1,18 @@
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  RefreshControl,
+} from 'react-native';
 import {colors} from '../../utils';
 import {useDispatch, useSelector} from 'react-redux';
 import BookHistoryCard from '../../component/molecules/BookHistoryCard';
 import {PageUndifined} from '../../component/molecules';
 import {useState} from 'react';
 import {fetchOrder} from '../../features/orderHistorySlice';
-import {useEffect} from 'react';
+import {useEffect, useCallback} from 'react';
 import {convertDate, lengthOfDay, localDate} from '../../utils/formatDate';
 
 export default function Receipt({navigation}) {
@@ -15,6 +22,15 @@ export default function Receipt({navigation}) {
 
   useEffect(() => {
     dispatch(fetchOrder());
+  }, []);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
   }, []);
 
   if (user) {

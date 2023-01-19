@@ -7,12 +7,12 @@ import {
   Image,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Button, Input} from '../../component/atoms';
 import {colors, formatIDR} from '../../utils';
 import {Header} from '../../component/molecules';
 import {lengthOfDay, convertDate} from '../../utils/formatDate';
-import {createGuest} from '../../features/guestSlice';
+import axios from 'axios';
 
 function makeid(length) {
   var result = '';
@@ -56,37 +56,48 @@ export default function Booking({route, navigation}) {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
   const hotel_name = useSelector(state => state.detail?.detail?.hotel_name);
-  const loading = useSelector(state => state.guest.loading);
-  const guest = useSelector(state => state.guest.guest);
   const [name, setName] = useState(user.firstName + ' ' + user.lastName);
-
+  const [guest, setGuest] = useState('');
   const [telephone, setTelephone] = useState(user.telephone);
   const [email, setEmail] = useState(user.email);
 
   console.log('guestt', guest);
 
   const inputGuest = async () => {
-    dispatch(createGuest({name, telephone, email}));
-    navigation.navigate('Payment', {
-      username: user?.username,
-      guest,
-      mainImage,
-      hotel_name,
-      book_id,
-      order_id,
-      stay_length: lengthOfDay(checkIn, checkOut),
-      checkIn,
-      checkOut,
-      person,
-      room,
-      name_room,
-      price: formatIDR.format(price * room),
-      transaction_time: convertDate(date),
-      originalDateCheckIn,
-      originalDateCheckOut,
-      hotel_id,
-    });
+    const response = await axios.post(
+      `${process.env.REACT_APP_URL_SERVER}/cms/guest`,
+      {
+        name,
+        telephone,
+        email,
+      },
+    );
+    setGuest(response.data.data._id);
   };
+
+  useEffect(() => {
+    if (guest.length) {
+      navigation.navigate('Payment', {
+        username: user?.username,
+        guest,
+        mainImage,
+        hotel_name,
+        book_id,
+        order_id,
+        stay_length: lengthOfDay(checkIn, checkOut),
+        checkIn,
+        checkOut,
+        person,
+        room,
+        name_room,
+        price: formatIDR.format(price * room),
+        transaction_time: convertDate(date),
+        originalDateCheckIn,
+        originalDateCheckOut,
+        hotel_id,
+      });
+    }
+  }, []);
 
   return (
     <SafeAreaView style={styles.page}>
@@ -168,7 +179,7 @@ export default function Booking({route, navigation}) {
             </View>
           </View>
           <Button
-            title={loading ? 'Loading...' : 'Continue'}
+            title="continue"
             color={colors.darkBlue}
             onPress={inputGuest}
           />

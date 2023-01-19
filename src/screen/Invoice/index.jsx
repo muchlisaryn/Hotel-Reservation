@@ -1,4 +1,5 @@
 import {
+  RefreshControl,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -9,7 +10,7 @@ import {
 import {colors} from '../../utils';
 import {Header} from '../../component/molecules';
 import {useDispatch, useSelector} from 'react-redux';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import {fetchOrderOne} from '../../features/getOneBooking';
 import {lengthOfDay} from '../../utils/formatDate';
 import ModalShowPayment from './modalShowPayment';
@@ -23,6 +24,15 @@ export default function Invoice({route, navigation}) {
 
   console.log('order', order);
   const dispatch = useDispatch();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     if (statusPayment === 'Sedang di verifikasi') {
@@ -49,7 +59,10 @@ export default function Invoice({route, navigation}) {
           onPress={() => navigation.goBack()}
         />
       </View>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View>
           <View style={{padding: 15}}>
             <Text numberOfLines={2} style={styles.textHeader}>
@@ -178,7 +191,7 @@ export default function Invoice({route, navigation}) {
           </View>
           <ModalShowPayment
             visible={modalVisible}
-            imagePay={order.image_payment.name}
+            imagePay={order?.image_payment?.name}
             onPressCancel={() => {
               setModalVisible(false);
             }}

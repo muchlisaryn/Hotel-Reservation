@@ -5,7 +5,6 @@ import {
 } from '@reduxjs/toolkit';
 import favoriteReducer from './features/favoriteSlice';
 import hotelReducer from './features/hotelSlice';
-import bookHistoryReducer from './features/bookHistorySlice';
 import loginReducer from './features/loginSlice';
 import logger from 'redux-logger';
 import ReviewSlice from './features/ReviewSlice';
@@ -42,6 +41,7 @@ const persistConfig = {
     'order',
     'allOrder',
     'guestSlice',
+    'guest',
   ],
 };
 
@@ -55,9 +55,9 @@ const rootReducer = combineReducers({
   photo: photoHotelSlice,
   auth: authReducer,
   order: orderReducer,
-  imageId: imageReducer,
-  allOrder: allOrderReducer,
   oneOrder: oneOrderReducer,
+  allOrder: allOrderReducer,
+  imageId: imageReducer,
   guest: guestReducer,
 });
 
