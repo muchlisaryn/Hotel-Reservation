@@ -4,7 +4,7 @@ import {Button} from '../../component/atoms';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Header} from '../../component/molecules';
-import {colors} from '../../utils';
+import {colors, formatIDR} from '../../utils';
 import {ScrollView} from 'react-native-gesture-handler';
 import {UploadPhoto} from '../../assets/img';
 import {useDispatch, useSelector} from 'react-redux';
@@ -13,7 +13,6 @@ import axios from 'axios';
 
 export default function Payment({route, navigation}) {
   const {
-    hotel_name,
     book_id,
     order_id,
     person,
@@ -25,14 +24,15 @@ export default function Payment({route, navigation}) {
     originalDateCheckIn,
     originalDateCheckOut,
     hotel_id,
+    hotel_name,
+    city,
+    address,
   } = route.params;
   const [photo, setPhoto] = useState(null);
   const [photoPayment, setPhotoPayment] = useState(null);
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
-  const [idImage, setIdImage] = useState('');
-  console.log('image', idImage);
 
   const handleChoosePhoto = () => {
     launchImageLibrary({noData: true}, response => {
@@ -42,6 +42,9 @@ export default function Payment({route, navigation}) {
       }
     });
   };
+
+  const [idImage, setIdImage] = useState();
+  console.log('image', idImage);
 
   const Upload = async () => {
     let imagePayment = new FormData();
@@ -58,28 +61,30 @@ export default function Payment({route, navigation}) {
       headers: {'Content-Type': 'multipart/form-data'},
     });
     setIdImage(res.data.data._id);
+    alert('Bukti Pembayaran berhasil di upload');
   };
 
-  useEffect(() => {
-    if (idImage?.length) {
-      navigation.navigate('BookingSuccess', {
-        customerID: user.id,
-        guest,
-        order_id,
-        hotel_id,
-        codeBooking: book_id,
-        countRoom: room,
-        countPerson: person,
-        name_room,
-        hotelName: hotel_name,
-        DateCheckIn: originalDateCheckIn,
-        DateCheckOut: originalDateCheckOut,
-        price,
-        imagePayment: idImage,
-        transaction_time,
-      });
-    }
-  });
+  const nextPage = () => {
+    navigation.navigate('BookingSuccess', {
+      hotel_id,
+      hotel_name,
+      city,
+      address,
+      customerID: user.id,
+      guest,
+      order_id,
+      codeBooking: book_id,
+      countRoom: room,
+      countPerson: person,
+      name_room,
+      hotelName: hotel_name,
+      DateCheckIn: originalDateCheckIn,
+      DateCheckOut: originalDateCheckOut,
+      price,
+      imagePayment: idImage,
+      transaction_time,
+    });
+  };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
@@ -113,7 +118,7 @@ export default function Payment({route, navigation}) {
               padding: 15,
             }}>
             <Text style={{color: colors.black}}>Jumlah yang harus dibayar</Text>
-            <Text style={styles.price}>{price}</Text>
+            <Text style={styles.price}>{formatIDR.format(price)}</Text>
           </View>
 
           <View style={{alignItems: 'center', marginBottom: 40}}>
@@ -152,12 +157,16 @@ export default function Payment({route, navigation}) {
             </Pressable>
           </View>
           <View style={{marginVertical: 20}}>
-            {photo?.assets ? (
-              <Button title="bayar" color={colors.darkBlue} onPress={Upload} />
+            {idImage ? (
+              <Button
+                title="Bayar"
+                color={colors.darkBlue}
+                onPress={nextPage}
+              />
             ) : (
               <Button
                 title="Upload Bukti Pembayaran"
-                onPress={handleChoosePhoto}
+                onPress={Upload}
                 color={colors.darkBlue}
               />
             )}

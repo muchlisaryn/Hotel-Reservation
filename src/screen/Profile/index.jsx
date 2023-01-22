@@ -1,4 +1,5 @@
 import {
+  RefreshControl,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -12,7 +13,7 @@ import Button from '../../component/atoms/Button';
 import {colors} from '../../utils';
 import {removeLogin} from '../../features/authSlice';
 import LogoutModal from './parts/LogoutModal';
-import {useState} from 'react';
+import {useState, useCallback} from 'react';
 import {PageUndifined} from '../../component/molecules';
 import {DefaultPhoto} from '../../assets/img';
 
@@ -22,6 +23,15 @@ export default function Profile({navigation}) {
   const favorites = useSelector(state => state?.favorite?.favorites);
   const [modalVisible, setModalVisible] = useState(false);
   const order = useSelector(state => state.allOrder.allOrder);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   return (
     <SafeAreaView style={styles.page}>

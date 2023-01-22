@@ -160,6 +160,9 @@ export default function SearchResult({route, navigation}) {
                 onPress={() =>
                   navigation.navigate('DetailHotel', {
                     hotel_id: item?.hotel_id,
+                    hotel_name: item?.hotel_name,
+                    city: item?.city_trans,
+                    address: item?.address,
                     checkIn: newCheckIn,
                     checkOut: newCheckOut,
                     guests: newGuest,

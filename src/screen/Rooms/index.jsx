@@ -8,12 +8,14 @@ import {fetchRooms} from '../../features/getRoomsSlice';
 export default function Rooms({route, navigation}) {
   const {
     hotel_id,
+    hotel_name,
+    city,
+    address,
     checkOut,
     checkIn,
     guests,
     rooms,
     image,
-    
     originalDateCheckIn,
     originalDateCheckOut,
   } = route.params;
@@ -73,7 +75,10 @@ export default function Rooms({route, navigation}) {
                   detail_room: room.rooms[item?.room_id],
                   originalDateCheckIn,
                   originalDateCheckOut,
-                  hotel_id
+                  hotel_id,
+                  hotel_name,
+                  city,
+                  address,
                 })
               }
             />

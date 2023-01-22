@@ -13,7 +13,7 @@ import {PageUndifined} from '../../component/molecules';
 import {useState} from 'react';
 import {fetchOrder} from '../../features/orderHistorySlice';
 import {useEffect, useCallback} from 'react';
-import {convertDate, lengthOfDay, localDate} from '../../utils/formatDate';
+import {convertDate, formatDate, lengthOfDay} from '../../utils/formatDate';
 
 export default function Receipt({navigation}) {
   const dispatch = useDispatch();
@@ -23,6 +23,8 @@ export default function Receipt({navigation}) {
   useEffect(() => {
     dispatch(fetchOrder());
   }, []);
+
+  console.log(order);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -56,21 +58,32 @@ export default function Receipt({navigation}) {
               <View style={{padding: 20}}>
                 {order?.map(item => (
                   <BookHistoryCard
+                    key={item?._id}
                     onPress={() =>
                       navigation.navigate('Invoice', {
                         id: item?._id,
                         statusOrder: item?.statusOrder,
-                        statusPayment: item?.statusPayment,
                         checkIn: convertDate(item?.checkIn),
                         checkOut: convertDate(item?.checkOut),
+                        lengthDay: lengthOfDay(
+                          formatDate(item?.checkIn),
+                          formatDate(item?.checkOut),
+                        ),
+                        guestName: item?.guest?.name,
                       })
                     }
+                    id={item?._id}
+                    hotel_name={item?.hotel_name}
                     transaction={item?.transaction_time}
                     statusPayment={item?.statusPayment}
                     price={item?.Total_payment}
-                    hotel_name={item?.hotelName}
                     checkIn={item?.checkIn}
                     checkOut={item?.checkOut}
+                    lengthDay={lengthOfDay(
+                      formatDate(item?.checkIn),
+                      formatDate(item?.checkOut),
+                    )}
+                    currentStatus={item?.currentStatus}
                   />
                 ))}
               </View>

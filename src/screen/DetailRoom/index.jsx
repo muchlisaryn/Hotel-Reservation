@@ -26,12 +26,13 @@ export default function DetailRoom({route, navigation}) {
     mainImage,
     originalDateCheckIn,
     originalDateCheckOut,
-    hotel_id
+    hotel_id,
+    hotel_name,
+    city,
+    address,
   } = route.params;
   const user = useSelector(state => state.auth.user);
   const totalPrice = price * room;
-
-  console.log(originalDateCheckIn, originalDateCheckOut);
 
   return (
     <SafeAreaView style={styles.page}>
@@ -158,7 +159,10 @@ export default function DetailRoom({route, navigation}) {
                   mainImage,
                   originalDateCheckIn,
                   originalDateCheckOut,
-                  hotel_id
+                  hotel_id,
+                  hotel_name,
+                  city,
+                  address,
                 })
               : navigation.navigate('Sign');
           }}

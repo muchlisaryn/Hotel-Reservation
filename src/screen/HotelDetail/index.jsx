@@ -23,6 +23,9 @@ import {fetchPhoto} from '../../features/photoHotelSlice';
 export default function DetailHotel({route, navigation}) {
   const {
     hotel_id,
+    hotel_name,
+    city,
+    address,
     checkIn,
     checkOut,
     guests,
@@ -178,7 +181,10 @@ export default function DetailHotel({route, navigation}) {
             <Button
               onPress={() =>
                 navigation.navigate('Rooms', {
-                  hotel_id: hotel_id,
+                  hotel_id,
+                  hotel_name,
+                  city,
+                  address,
                   checkOut: checkOut,
                   checkIn: checkIn,
                   guests: guests,

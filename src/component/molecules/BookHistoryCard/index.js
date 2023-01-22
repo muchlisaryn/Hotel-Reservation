@@ -1,19 +1,21 @@
 import {useState} from 'react';
 import {StyleSheet, Text, View, Pressable} from 'react-native';
-import {colors} from '../../../utils';
-import {convertDate} from '../../../utils/formatDate';
+import {colors, formatIDR} from '../../../utils';
+import {convertDate, lengthOfDay} from '../../../utils/formatDate';
 
 export default function BookHistoryCard({
+  id,
   onPress,
   hotel_name,
-  stay_length,
+  lengthDay,
   checkIn,
   checkOut,
   price,
   transaction,
-  statusOrder,
-  statusPayment,
+  currentStatus,
 }) {
+  console.log('current', currentStatus);
+
   return (
     <View style={styles.container}>
       <Pressable
@@ -39,28 +41,28 @@ export default function BookHistoryCard({
               </Text>
             </View>
             <View>
-              <Text style={styles.text(colors.darkBlue)}>{price}</Text>
+              <Text style={styles.text(colors.darkBlue)}>
+                {formatIDR.format(price)}
+              </Text>
             </View>
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text
               style={{color: colors.darkGrey, fontSize: 12, fontWeight: '400'}}>
-              {convertDate(checkIn)} - {convertDate(checkOut)} ({stay_length}{' '}
-              days)
+              {convertDate(checkIn)} - {convertDate(checkOut)} ({lengthDay}{' '}
+              Days)
             </Text>
 
-            {statusPayment === 'Sedang di verifikasi' ? (
-              <Text>{statusPayment}</Text>
+            {currentStatus === 'Diproses' ? <Text>Diproses</Text> : <></>}
+            {currentStatus === 'Dibatalkan' ? (
+              <Text style={styles.statusOrder(colors.red)}>Dibatalkan</Text>
             ) : (
-              <>
-                {statusOrder ? (
-                  <Text style={styles.statusOrder(colors.darkGreen)}>
-                    Aktif
-                  </Text>
-                ) : (
-                  <Text style={styles.statusOrder(colors.red)}>Selesai</Text>
-                )}
-              </>
+              <></>
+            )}
+            {currentStatus === 'Berhasil' ? (
+              <Text>{currentStatus}</Text>
+            ) : (
+              <></>
             )}
           </View>
         </View>

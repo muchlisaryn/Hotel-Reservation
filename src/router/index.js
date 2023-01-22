@@ -80,7 +80,7 @@ const MainApp = () => {
 };
 
 const Router = () => {
-  const user = useSelector(state => state.login.user);
+  const user = useSelector(state => state.auth.user);
 
   return (
     <Stack.Navigator initialRouteName="Splash">

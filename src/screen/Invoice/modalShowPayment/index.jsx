@@ -30,7 +30,7 @@ export default function ModalShowPayment({
           <View style={styles.optionView}>
             <View style={{width: 10}}></View>
             <TouchableOpacity style={styles.button} onPress={onPressCancel}>
-              <Text style={styles.textButton}>Cancel</Text>
+              <Text style={styles.textButton}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>

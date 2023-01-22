@@ -16,6 +16,7 @@ export default function Sign({navigation}) {
   const [password, setPassword] = useState();
   const loading = useSelector(state => state.auth.loading);
   const success = useSelector(state => state.auth.success);
+
   const user = useSelector(state => state.auth.user);
 
   const Login = () => {
@@ -46,6 +47,7 @@ export default function Sign({navigation}) {
           <Logo />
         </View>
         <Text style={styles.text}>Masukan Email dan Password Anda</Text>
+
         <View style={styles.Input}>
           <Input
             type="email"

@@ -52,16 +52,18 @@ export default function Booking({route, navigation}) {
     originalDateCheckIn,
     originalDateCheckOut,
     hotel_id,
+    hotel_name,
+    city,
+    address,
   } = route.params;
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
-  const hotel_name = useSelector(state => state.detail?.detail?.hotel_name);
   const [name, setName] = useState(user.firstName + ' ' + user.lastName);
-  const [guest, setGuest] = useState('');
+  const [guest, setGuest] = useState();
   const [telephone, setTelephone] = useState(user.telephone);
   const [email, setEmail] = useState(user.email);
 
-  console.log('guestt', guest);
+  console.log(price);
 
   const inputGuest = async () => {
     const response = await axios.post(
@@ -73,31 +75,33 @@ export default function Booking({route, navigation}) {
       },
     );
     setGuest(response.data.data._id);
+    alert('data berhasil disimpan');
   };
 
-  useEffect(() => {
-    if (guest.length) {
-      navigation.navigate('Payment', {
-        username: user?.username,
-        guest,
-        mainImage,
-        hotel_name,
-        book_id,
-        order_id,
-        stay_length: lengthOfDay(checkIn, checkOut),
-        checkIn,
-        checkOut,
-        person,
-        room,
-        name_room,
-        price: formatIDR.format(price * room),
-        transaction_time: convertDate(date),
-        originalDateCheckIn,
-        originalDateCheckOut,
-        hotel_id,
-      });
-    }
-  }, []);
+  const nextPage = () => {
+    navigation.navigate('Payment', {
+      username: user?.username,
+      guest,
+      mainImage,
+      hotel_name,
+      book_id,
+      order_id,
+      stay_length: lengthOfDay(checkIn, checkOut),
+      checkIn,
+      checkOut,
+      person,
+      room,
+      name_room,
+      price,
+      transaction_time: convertDate(date),
+      originalDateCheckIn,
+      originalDateCheckOut,
+      hotel_id,
+      hotel_name,
+      city,
+      address,
+    });
+  };
 
   return (
     <SafeAreaView style={styles.page}>
@@ -178,11 +182,19 @@ export default function Booking({route, navigation}) {
               </Text>
             </View>
           </View>
-          <Button
-            title="continue"
-            color={colors.darkBlue}
-            onPress={inputGuest}
-          />
+          {guest ? (
+            <Button
+              title="continue"
+              color={colors.darkBlue}
+              onPress={nextPage}
+            />
+          ) : (
+            <Button
+              title="Simpan data"
+              color={colors.darkBlue}
+              onPress={inputGuest}
+            />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

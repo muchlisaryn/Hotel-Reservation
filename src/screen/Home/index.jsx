@@ -15,8 +15,6 @@ export default function Home({navigation}) {
   const [input, setInput] = useState('');
   const [inputCheckIn, setInputCheckIn] = useState(null);
   const [inputCheckOut, setInputCheckOut] = useState(null);
-  const date = new Date();
-  const [minimumDate, setMinimumDate] = useState(date);
   const [checkIn, setCheckIn] = useState('Check in');
   const [checkOut, setCheckOut] = useState('Check Out');
   const [dateCheckIn, setDateCheckIn] = useState('');
@@ -30,7 +28,7 @@ export default function Home({navigation}) {
   const [room, setRoom] = useState(1);
 
   console.log(
-    'checkIn ',
+    'checkIn => ',
     originalDateCheckIn,
     'checkout => ',
     originalDateCheckOut,
@@ -108,21 +106,25 @@ export default function Home({navigation}) {
                 />
                 {openCheckin && (
                   <DateTimePicker
-                    value={date}
+                    value={new Date()}
                     mode={'date'}
                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                    minimumDate={date}
+                    minimumDate={new Date()}
                     maximumDate={maxDate}
                     onChange={(event, selectedDate) => {
                       if (event.type == 'set') {
                         setOpenCheckin(false);
+                        setOriginalDateCheckIn(
+                          new Date(
+                            selectedDate.setDate(selectedDate.getDate()),
+                          ),
+                        );
                         setInputCheckIn(formatDate(selectedDate));
-                        setOriginalDateCheckIn(selectedDate);
                         setCheckIn(selectedDate.toLocaleDateString('pt-PT'));
                         const date = String(selectedDate.getDate());
                         const month = shortMonth.format(selectedDate);
                         setDateCheckIn(date + ' ' + month);
-                        setMinimumDate(
+                        setOriginalDateCheckOut(
                           new Date(
                             selectedDate.setDate(selectedDate.getDate() + 1),
                           ),
@@ -144,15 +146,15 @@ export default function Home({navigation}) {
                 />
                 {openCheckout && (
                   <DateTimePicker
-                    value={minimumDate}
+                    value={originalDateCheckOut}
                     mode={'date'}
                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                    minimumDate={minimumDate}
+                    minimumDate={originalDateCheckIn}
                     onChange={(event, selectedDate) => {
                       if (event.type == 'set') {
                         setOpenCheckout(false);
-                        setInputCheckOut(formatDate(selectedDate));
                         setOriginalDateCheckOut(selectedDate);
+                        setInputCheckOut(formatDate(selectedDate));
                         setCheckOut(selectedDate.toLocaleDateString('pt-PT'));
                         const month = shortMonth.format(new Date(selectedDate));
                         const day = String(selectedDate.getDate());

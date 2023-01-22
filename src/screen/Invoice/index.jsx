@@ -7,7 +7,7 @@ import {
   View,
   Image,
 } from 'react-native';
-import {colors} from '../../utils';
+import {colors, formatIDR} from '../../utils';
 import {Header} from '../../component/molecules';
 import {useDispatch, useSelector} from 'react-redux';
 import {useState, useEffect, useCallback} from 'react';
@@ -17,11 +17,12 @@ import ModalShowPayment from './modalShowPayment';
 
 export default function Invoice({route, navigation}) {
   const [colorStatus, setColorStatus] = useState(colors.yellow);
-  const {statusOrder, statusPayment, id, checkIn, checkOut} = route.params;
+  const {statusOrder, id, checkIn, checkOut, lengthDay} = route.params;
   const [modalVisible, setModalVisible] = useState(false);
 
   const order = useSelector(state => state.oneOrder.order);
 
+  console.log('status Order', statusOrder);
   console.log('order', order);
   const dispatch = useDispatch();
 
@@ -35,11 +36,11 @@ export default function Invoice({route, navigation}) {
   }, []);
 
   useEffect(() => {
-    if (statusPayment === 'Sedang di verifikasi') {
+    if (statusOrder === 'Sedang di verifikasi') {
       setColorStatus(colors.darkBlue);
-    } else if (statusPayment === 'Berhasil di verifikasi') {
+    } else if (statusOrder === 'Berhasil di verifikasi') {
       setColorStatus(colors.darkGreen);
-    } else if (statusPayment === 'Ditolak') {
+    } else if (statusOrder === 'Ditolak') {
       setColorStatus(colors.red);
     }
   }, []);
@@ -47,9 +48,6 @@ export default function Invoice({route, navigation}) {
   useEffect(() => {
     dispatch(fetchOrderOne(id));
   }, []);
-
-  const dateCheckIn = Number(checkIn);
-  const dateCheckOut = Number(checkOut);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -66,10 +64,10 @@ export default function Invoice({route, navigation}) {
         <View>
           <View style={{padding: 15}}>
             <Text numberOfLines={2} style={styles.textHeader}>
-              {order?.hotelName}
+              {order?.hotel_name}
             </Text>
 
-            {statusOrder ? (
+            {statusOrder === 'Berhasil' ? (
               <>
                 <View
                   style={{
@@ -80,8 +78,8 @@ export default function Invoice({route, navigation}) {
                     padding: 5,
                     borderRadius: 10,
                   }}>
-                  <Text style={styles.text(colors.white)}>Booking ID:</Text>
-                  <Text style={styles.invoiceId}>invoice</Text>
+                  <Text style={styles.text(colors.white)}>Kode Booking:</Text>
+                  <Text style={styles.invoiceId}>{order?.codeBooking}</Text>
                 </View>
               </>
             ) : (
@@ -112,7 +110,7 @@ export default function Invoice({route, navigation}) {
                     styles.text(colors.black),
                     {flex: 1, textAlign: 'right', fontWeight: '800'},
                   ]}>
-                  {order?.Total_payment}
+                  {formatIDR.format(order?.Total_payment)}
                 </Text>
               </View>
 
@@ -135,14 +133,14 @@ export default function Invoice({route, navigation}) {
 
               <View style={styles.rowContainer}>
                 <Text style={styles.text(colors.darkGrey)}>
-                  Status Pembayaran
+                  Status Pemesanan
                 </Text>
                 <Text
                   style={[
-                    styles.text(colorStatus),
+                    styles.text(colors.darkGrey),
                     {flex: 1, textAlign: 'right', fontWeight: 'bold'},
                   ]}>
-                  {statusPayment}
+                  {order?.currentStatus}
                 </Text>
               </View>
             </View>
@@ -159,8 +157,7 @@ export default function Invoice({route, navigation}) {
                     styles.text(colors.black),
                     {flex: 1, textAlign: 'right'},
                   ]}>
-                  {checkIn} - {checkOut}{' '}
-                  {`(${lengthOfDay(dateCheckIn, dateCheckOut)} Days)`}
+                  {checkIn} - {checkOut} ({lengthDay} Days)
                 </Text>
               </View>
 
@@ -185,6 +182,45 @@ export default function Invoice({route, navigation}) {
                     {flex: 1, textAlign: 'right', paddingStart: 2},
                   ]}>
                   {order?.name_room}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.card}>
+              <Text style={{color: colors.black, fontWeight: '600'}}>
+                DATA TAMU
+              </Text>
+
+              <View style={styles.rowContainer}>
+                <Text style={styles.text(colors.darkGrey)}>Nama</Text>
+                <Text
+                  style={[
+                    styles.text(colors.black),
+                    {flex: 1, textAlign: 'right'},
+                  ]}>
+                  {order?.guest?.name}
+                </Text>
+              </View>
+
+              <View style={styles.rowContainer}>
+                <Text style={styles.text(colors.darkGrey)}>No Telephone</Text>
+                <Text
+                  style={[
+                    styles.text(colors.black),
+                    {flex: 1, textAlign: 'right'},
+                  ]}>
+                  {order?.guest?.telephone}
+                </Text>
+              </View>
+
+              <View style={styles.rowContainer}>
+                <Text style={styles.text(colors.darkGrey)}>Email</Text>
+                <Text
+                  style={[
+                    styles.text(colors.black),
+                    {flex: 1, textAlign: 'right', paddingStart: 2},
+                  ]}>
+                  {order?.guest?.email}
                 </Text>
               </View>
             </View>

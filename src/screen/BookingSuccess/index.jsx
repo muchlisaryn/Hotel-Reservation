@@ -5,6 +5,7 @@ import {ErrorIlustration, Ilustration2} from '../../assets/img';
 import {colors} from '../../utils';
 import {useDispatch, useSelector} from 'react-redux';
 import {order} from '../../features/bookingSlice';
+import axios from 'axios';
 
 export default function BookingSuccess({route, navigation}) {
   const dispatch = useDispatch();
@@ -12,15 +13,17 @@ export default function BookingSuccess({route, navigation}) {
   const error = useSelector(state => state.order.error);
 
   const {
+    hotel_id,
+    hotel_name,
+    city,
+    address,
     customerID,
     guest,
     order_id,
-    hotel_id,
     codeBooking,
     countRoom,
     countPerson,
     name_room,
-    hotelName,
     DateCheckIn,
     DateCheckOut,
     price,
@@ -28,25 +31,24 @@ export default function BookingSuccess({route, navigation}) {
     transaction_time,
   } = route.params;
 
-  console.log(route.params);
-
   useEffect(() => {
     dispatch(
       order({
         customerID,
         guest,
+        imagePayment,
         order_id,
         hotel_id,
         codeBooking,
+        hotel_name,
+        address_hotel: address,
         countRoom,
         countPerson,
         name_room,
-        hotelName,
         DateCheckIn,
         DateCheckOut,
         price,
         charge_pay: price,
-        imagePayment,
         transaction_time,
       }),
     );
