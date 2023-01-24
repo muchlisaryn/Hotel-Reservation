@@ -32,6 +32,13 @@ export default function BookingSuccess({route, navigation}) {
   } = route.params;
 
   useEffect(() => {
+    axios.post(`${process.env.REACT_APP_URL_SERVER}/cms/hotel`, {
+      hotel_id,
+      name: hotel_name,
+      city,
+      Address: address,
+    });
+
     dispatch(
       order({
         customerID,

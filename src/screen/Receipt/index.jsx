@@ -19,6 +19,9 @@ export default function Receipt({navigation}) {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
   const order = useSelector(state => state.allOrder.allOrder);
+  const filterData = order.filter(item => item?.customer?._id === user?.id);
+
+  console.log('ini ORder', user);
 
   useEffect(() => {
     dispatch(fetchOrder());
@@ -54,9 +57,9 @@ export default function Receipt({navigation}) {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
           <View style={styles.page}>
-            {order ? (
+            {filterData ? (
               <View style={{padding: 20}}>
-                {order?.map(item => (
+                {filterData?.map(item => (
                   <BookHistoryCard
                     key={item?._id}
                     onPress={() =>

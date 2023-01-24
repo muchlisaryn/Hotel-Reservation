@@ -34,6 +34,7 @@ const persistConfig = {
   storage: AsyncStorage,
   blacklist: [
     'hotel',
+    'auth',
     'review',
     'detail',
     'rooms',

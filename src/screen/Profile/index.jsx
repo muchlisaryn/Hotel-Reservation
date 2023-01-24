@@ -13,9 +13,10 @@ import Button from '../../component/atoms/Button';
 import {colors} from '../../utils';
 import {removeLogin} from '../../features/authSlice';
 import LogoutModal from './parts/LogoutModal';
-import {useState, useCallback} from 'react';
+import {useState, useCallback, useEffect} from 'react';
 import {PageUndifined} from '../../component/molecules';
 import {DefaultPhoto} from '../../assets/img';
+import {fetchOrder} from '../../features/orderHistorySlice';
 
 export default function Profile({navigation}) {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ export default function Profile({navigation}) {
   const favorites = useSelector(state => state?.favorite?.favorites);
   const [modalVisible, setModalVisible] = useState(false);
   const order = useSelector(state => state.allOrder.allOrder);
+  const filterData = order.filter(item => item?.customer?._id === user?.id);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -31,6 +33,10 @@ export default function Profile({navigation}) {
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchOrder());
   }, []);
 
   return (
@@ -74,7 +80,7 @@ export default function Profile({navigation}) {
                     <Text
                       style={styles.totalActivity}
                       onPress={() => navigation.navigate('Receipt')}>
-                      {order.length || 0}
+                      {filterData.length || 0}
                     </Text>
                     <Text style={styles.titleActivity}>Booking</Text>
                   </View>

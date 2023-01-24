@@ -20,6 +20,7 @@ import {
   Payment,
   DataDiri,
   OrderProcess,
+  UploadProfile,
 } from '../screen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -101,6 +102,12 @@ const Router = () => {
       <Stack.Screen
         name="SuccessLogin"
         component={SuccessLogin}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="UploadPhoto"
+        component={UploadProfile}
         options={{headerShown: false}}
       />
 

@@ -8,7 +8,7 @@ import {colors, formatIDR} from '../../utils';
 import {ScrollView} from 'react-native-gesture-handler';
 import {UploadPhoto} from '../../assets/img';
 import {useDispatch, useSelector} from 'react-redux';
-import {createImage, deleteId} from '../../features/createImageSlice';
+
 import axios from 'axios';
 
 export default function Payment({route, navigation}) {
@@ -30,6 +30,8 @@ export default function Payment({route, navigation}) {
   } = route.params;
   const [photo, setPhoto] = useState(null);
   const [photoPayment, setPhotoPayment] = useState(null);
+  const [nomorRekening, setNomorRekening] = useState([]);
+  console.log('ini nomor rek', nomorRekening);
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
@@ -86,6 +88,18 @@ export default function Payment({route, navigation}) {
     });
   };
 
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_URL_SERVER}/cms/rekening`)
+      .then(ressponse => {
+        console.log(ressponse);
+        setNomorRekening(ressponse.data.data[0]);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <View
@@ -122,21 +136,45 @@ export default function Payment({route, navigation}) {
           </View>
 
           <View style={{alignItems: 'center', marginBottom: 40}}>
-            <Image
-              source={{
-                uri: 'https://buatlogoonline.com/wp-content/uploads/2022/10/Logo-Bank-BCA-1.png',
-              }}
-              style={{width: 50, height: 50}}
-            />
+            {nomorRekening.bank === 'BCA' ? (
+              <Image
+                source={{
+                  uri: 'https://buatlogoonline.com/wp-content/uploads/2022/10/Logo-Bank-BCA-1.png',
+                }}
+                style={{width: 50, height: 50}}
+              />
+            ) : (
+              <></>
+            )}
+            {nomorRekening.bank === 'BRI' ? (
+              <Image
+                source={{
+                  uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/BRI_2020.svg/1200px-BRI_2020.svg.png',
+                }}
+                style={{width: 50, height: 50}}
+              />
+            ) : (
+              <></>
+            )}
+            {nomorRekening.bank === 'BNI' ? (
+              <Image
+                source={{
+                  uri: 'https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/1200px-BNI_logo.svg.png',
+                }}
+                style={{width: 50, height: 50}}
+              />
+            ) : (
+              <></>
+            )}
             <View style={{alignItems: 'center'}}>
-              <Text>a/n Hotel.com</Text>
+              <Text>a/n {nomorRekening?.pemilik}</Text>
               <Text
                 style={{
                   fontSize: 20,
                   fontWeight: 'bold',
                   color: colors.darkGrey,
                 }}>
-                023 702 02821412
+                {nomorRekening?.nomor}
               </Text>
             </View>
           </View>

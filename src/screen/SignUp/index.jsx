@@ -9,6 +9,19 @@ export default function SignUp({navigation}) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const nextPage = () => {
+    if (email == '' || password == '' || confirmPassword == '') {
+      alert('Harus di isi');
+    } else if (password !== confirmPassword) {
+      alert('password tidak sama');
+    } else {
+      navigation.navigate('DataDiri', {
+        email,
+        password,
+      });
+    }
+  };
+
   return (
     <SafeAreaView style={styles.page}>
       <Header title="Registrasi" onPress={() => navigation.goBack()} />
@@ -38,16 +51,7 @@ export default function SignUp({navigation}) {
             onChangeText={value => setConfirmPassword(value)}
           />
           <Gap height={20} />
-          <Button
-            title="Continue"
-            color={colors.yellow}
-            onPress={() =>
-              navigation.navigate('DataDiri', {
-                email,
-                password,
-              })
-            }
-          />
+          <Button title="Continue" color={colors.yellow} onPress={nextPage} />
           <View
             style={{
               flexDirection: 'row',

@@ -31,6 +31,7 @@ const authSlice = createSlice({
   reducers: {
     removeLogin: state => {
       state.user = null;
+      state.success = false;
     },
     updateUser: (state, action) => {
       state.user[action.payload.prop] = action.payload.value;

@@ -16,6 +16,7 @@ import BookingSuccess from './BookingSuccess';
 import Payment from './Payment';
 import SignUp from './SignUp';
 import DataDiri from './DataDiri';
+import UploadProfile from './UploadProfile';
 
 export {
   Sign,
@@ -36,4 +37,5 @@ export {
   Payment,
   SignUp,
   DataDiri,
+  UploadProfile,
 };

@@ -1,99 +1,48 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  Image,
-  Pressable,
-} from 'react-native';
+import {View, Text, SafeAreaView, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {Header} from '../../component/molecules';
 import {colors} from '../../utils';
 import {Button, Gap, Input} from '../../component/atoms';
+import SelectDropdown from 'react-native-select-dropdown';
 import axios from 'axios';
-import {BtnAddPhoto, DefaultPhoto} from '../../assets/img';
-import {launchImageLibrary} from 'react-native-image-picker';
+
 import {ScrollView} from 'react-native-gesture-handler';
 
 export default function DataDiri({route, navigation}) {
   const {email, password} = route.params;
-  const [data, setData] = useState([]);
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [telephone, setTelephone] = useState(0);
-  const [photo, setPhoto] = useState('');
+  const [bank, setBank] = useState('');
+  const [pemilikRek, setPemilikRek] = useState('');
+  const [nomorRek, setNomorRek] = useState('');
+  const countries = ['BCA', 'BRI', 'BNI'];
 
-  const signUp = () => {
-    axios
-      .post(`${process.env.REACT_APP_URL_SERVER}/cms/users`, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        email: email,
-        password: password,
-        confirmPassword: password,
-        username: username,
-        firstName: firstName,
-        lastName: lastName,
-        telephone: telephone,
-        image: photo?.assets[0].fileName,
-        role: 'user',
-      })
-      .then(Response => {
-        console.log(Response.data.data);
-        setData(Response.data.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    if (data) {
-      navigation.navigate('Sign');
-    }
-  };
+  console.log('ini select', bank);
 
-  const handleChoosePhoto = () => {
-    launchImageLibrary({noData: true}, response => {
-      if (response) {
-        setPhoto(response);
-      }
+  const nextPage = () => {
+    navigation.navigate('UploadPhoto', {
+      email,
+      password,
+      username,
+      firstName,
+      lastName,
+      telephone,
+      bank,
+      pemilikRek,
+      nomorRek,
     });
   };
 
   return (
     <SafeAreaView style={styles.page}>
       <View style={{paddingBottom: 20}}>
-        <Header
-          title="Isi Data Diri Anda"
-          onPress={() => navigation.goBack()}
-        />
+        <Header title="Isi Data Anda" onPress={() => navigation.goBack()} />
       </View>
       <ScrollView>
         <View style={styles.content}>
           <View style={{marginTop: 50}}>
-            <View
-              style={{
-                alignItems: 'center',
-                marginBottom: 20,
-              }}>
-              <Pressable onPress={handleChoosePhoto}>
-                {photo?.assets ? (
-                  <Image
-                    source={{uri: photo.assets[0].uri}}
-                    style={styles.imagePayment(photo)}
-                  />
-                ) : (
-                  <View>
-                    <Image
-                      source={DefaultPhoto}
-                      style={styles.imagePayment(photo)}
-                    />
-                    <BtnAddPhoto style={styles.addPhoto} />
-                  </View>
-                )}
-              </Pressable>
-            </View>
-
             <Text style={styles.headerInput}>Username</Text>
             <Input
               type="user"
@@ -136,9 +85,65 @@ export default function DataDiri({route, navigation}) {
               placeholder="Masukan First Name Anda..."
               onChangeText={value => setTelephone(value)}
             />
+            <Text
+              style={{
+                marginTop: 10,
+                fontSize: 10,
+                textAlign: 'center',
+                color: colors.white,
+              }}>
+              *Nomor rekening ini adalah nomor rekening yang dipakai pada saat
+              transaksi
+            </Text>
+            <View style={{width: '100%'}}>
+              <Text style={styles.headerInput}>Bank</Text>
+              <SelectDropdown
+                buttonStyle={styles.dropdown1BtnStyle}
+                buttonTextStyle={styles.dropdown1BtnTxtStyle}
+                dropdownStyle={styles.dropdown1DropdownStyle}
+                rowStyle={styles.dropdown1RowStyle}
+                rowTextStyle={styles.dropdown1RowTxtStyle}
+                defaultButtonText={'Select Bank'}
+                data={countries}
+                buttonTextAfterSelection={(selectedItem, index) => {
+                  setBank(selectedItem);
+                  return selectedItem;
+                }}
+                rowTextForSelection={(item, index) => {
+                  return item;
+                }}
+              />
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: '100%',
+              }}>
+              <View style={styles.input}>
+                <Text style={styles.headerInput}>Pemilik Rekening</Text>
+                <View>
+                  <Input
+                    placeholder="Pemilik Rekening"
+                    onChangeText={value => setPemilikRek(value)}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.input}>
+                <Text style={styles.headerInput}>Nomor Rekening</Text>
+                <View>
+                  <Input
+                    placeholder="Last Name"
+                    onChangeText={value => setNomorRek(value)}
+                  />
+                </View>
+              </View>
+            </View>
 
             <Gap height={20} />
-            <Button title="Continue" onPress={signUp} color={colors.yellow} />
+            <Button title="Continue" color={colors.yellow} onPress={nextPage} />
             <View
               style={{
                 flexDirection: 'row',
@@ -152,12 +157,7 @@ export default function DataDiri({route, navigation}) {
                 }}>
                 Sudah Punya akun?
               </Text>
-              <Button
-                type="link"
-                title="Sign in"
-                color={colors.yellow}
-                onPress={signUp}
-              />
+              <Button type="link" title="Sign in" color={colors.yellow} />
             </View>
           </View>
         </View>
@@ -173,8 +173,13 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   content: {
-    justifyContent: 'center',
     flex: 1,
+    justifyContent: 'center',
+  },
+  bank: {
+    width: 50,
+    color: colors.white,
+    marginVertical: 5,
   },
   headerInput: {
     color: colors.white,
@@ -183,16 +188,13 @@ const styles = StyleSheet.create({
   input: {
     width: '48%',
   },
-  imagePayment: photo => ({
-    width: 120,
-    height: 120,
-    borderRadius: 99,
-    borderColor: photo?.assets ? colors.yellow : colors.white,
-    borderWidth: 1,
-  }),
-  addPhoto: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
+  dropdown1BtnStyle: {
+    width: '100%',
+    height: 50,
+    borderRadius: 8,
   },
+  dropdown1BtnTxtStyle: {color: '#444', textAlign: 'left'},
+  dropdown1DropdownStyle: {backgroundColor: '#EFEFEF'},
+  dropdown1RowStyle: {backgroundColor: '#EFEFEF', borderBottomColor: '#C5C5C5'},
+  dropdown1RowTxtStyle: {color: '#444', textAlign: 'left'},
 });
