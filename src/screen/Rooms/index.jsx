@@ -29,8 +29,6 @@ export default function Rooms({route, navigation}) {
     }
   }, []);
 
-  console.log(originalDateCheckIn, originalDateCheckOut);
-
   return (
     <SafeAreaView style={styles.page}>
       <View style={styles.header}>
@@ -50,11 +48,11 @@ export default function Rooms({route, navigation}) {
               key={index}
               title={item?.name_without_policy}
               price={item?.product_price_breakdown.all_inclusive_amount?.value}
-              image={room.rooms[item?.room_id].photos}
-              bed_type={
-                room.rooms[item?.room_id].bed_configurations[0].bed_types[0]
-                  .name_with_count
-              }
+              image={room?.rooms[item?.room_id].photos}
+              // bed_type={
+              //   room?.rooms[item?.room_id]?.bed_configurations[0]?.bed_types[0]
+              //     ?.name_with_count
+              // }
               person={guests}
               room_count={item?.room_count}
               onPress={() =>
@@ -64,8 +62,8 @@ export default function Rooms({route, navigation}) {
                   price:
                     item?.product_price_breakdown?.all_inclusive_amount?.value,
                   bed_type:
-                    room.rooms[item?.room_id].bed_configurations[0].bed_types[0]
-                      .name_with_count,
+                    room?.rooms[item?.room_id]?.bed_configurations[0]
+                      .bed_types[0].name_with_count,
                   room: rooms,
                   person: guests,
                   checkIn: checkIn,

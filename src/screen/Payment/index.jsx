@@ -113,12 +113,37 @@ export default function Payment({route, navigation}) {
       <ScrollView>
         <View style={{paddingHorizontal: 20}}>
           <View style={styles.box}>
-            <Image
-              source={{
-                uri: 'https://buatlogoonline.com/wp-content/uploads/2022/10/Logo-Bank-BCA-1.png',
-              }}
-              style={{width: 50, height: 50}}
-            />
+            {nomorRekening.bank === 'BCA' ? (
+              <Image
+                source={{
+                  uri: 'https://buatlogoonline.com/wp-content/uploads/2022/10/Logo-Bank-BCA-1.png',
+                }}
+                style={{width: 50, height: 50}}
+              />
+            ) : (
+              <></>
+            )}
+            {nomorRekening?.bank === 'BNI' ? (
+              <Image
+                source={{
+                  uri: 'https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/1200px-BNI_logo.svg.png',
+                }}
+                resizeMode={'center'}
+                style={{width: '20%', height: 50}}
+              />
+            ) : (
+              <></>
+            )}
+            {nomorRekening?.bank === 'BRI' ? (
+              <Image
+                source={{
+                  uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/BRI_2020.svg/1200px-BRI_2020.svg.png',
+                }}
+                style={{width: 50, height: 50}}
+              />
+            ) : (
+              <></>
+            )}
             <Text style={{fontWeight: 'normal', color: colors.black}}>
               Transfer Manual
             </Text>
@@ -135,7 +160,7 @@ export default function Payment({route, navigation}) {
             <Text style={styles.price}>{formatIDR.format(price)}</Text>
           </View>
 
-          <View style={{alignItems: 'center', marginBottom: 40}}>
+          <View style={{alignItems: 'center', marginBottom: 20}}>
             {nomorRekening.bank === 'BCA' ? (
               <Image
                 source={{
@@ -161,7 +186,8 @@ export default function Payment({route, navigation}) {
                 source={{
                   uri: 'https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/1200px-BNI_logo.svg.png',
                 }}
-                style={{width: 50, height: 50}}
+                resizeMode={'center'}
+                style={{width: '30%', height: 50}}
               />
             ) : (
               <></>
@@ -179,6 +205,13 @@ export default function Payment({route, navigation}) {
             </View>
           </View>
 
+          <View style={{marginBottom: 5}}>
+            <Text style={{textAlign: 'center'}}>
+              transfer menggunakan nomor rekening yang anda daftarkan, untuk
+              memudahkan verifikasi
+            </Text>
+          </View>
+
           <View style={{alignItems: 'center'}}>
             <Pressable onPress={handleChoosePhoto}>
               {photoPayment ? (
@@ -187,10 +220,15 @@ export default function Payment({route, navigation}) {
                   style={styles.imagePayment(photo)}
                 />
               ) : (
-                <Image
-                  source={UploadPhoto}
-                  style={styles.imagePayment(photo)}
-                />
+                <>
+                  <Image
+                    source={UploadPhoto}
+                    style={styles.imagePayment(photo)}
+                  />
+                  <Text style={{textAlign: 'center', marginTop: 5}}>
+                    Upload JPEG, JPG, PNG
+                  </Text>
+                </>
               )}
             </Pressable>
           </View>

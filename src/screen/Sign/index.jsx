@@ -11,21 +11,28 @@ import {auth} from '../../features/authSlice';
 
 export default function Sign({navigation}) {
   const dispatch = useDispatch();
-
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const loading = useSelector(state => state.auth.loading);
   const success = useSelector(state => state.auth.success);
-
+  const error = useSelector(state => state.auth.error);
   const user = useSelector(state => state.auth.user);
 
   const Login = () => {
-    dispatch(
-      auth({
-        email,
-        password,
-      }),
-    );
+    if (email == '' && password == '') {
+      alert('email & password harus diisi');
+    } else if (email == '') {
+      alert('email tidak boleh kosong');
+    } else if (password == '') {
+      alert('password tidak boleh kosong');
+    } else {
+      dispatch(
+        auth({
+          email,
+          password,
+        }),
+      );
+    }
   };
 
   useEffect(() => {

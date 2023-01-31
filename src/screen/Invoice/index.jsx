@@ -17,7 +17,8 @@ import ModalShowPayment from './modalShowPayment';
 
 export default function Invoice({route, navigation}) {
   const [colorStatus, setColorStatus] = useState(colors.yellow);
-  const {statusOrder, id, checkIn, checkOut, lengthDay} = route.params;
+  const {currentStatus, statusOrder, id, checkIn, checkOut, lengthDay} =
+    route.params;
   const [modalVisible, setModalVisible] = useState(false);
 
   const order = useSelector(state => state.oneOrder.order);
@@ -67,7 +68,7 @@ export default function Invoice({route, navigation}) {
               {order?.hotel_name}
             </Text>
 
-            {statusOrder === 'Berhasil' ? (
+            {currentStatus === 'Berhasil' ? (
               <>
                 <View
                   style={{

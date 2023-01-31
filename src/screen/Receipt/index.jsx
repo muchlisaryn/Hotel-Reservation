@@ -57,7 +57,7 @@ export default function Receipt({navigation}) {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
           <View style={styles.page}>
-            {filterData ? (
+            {filterData.length ? (
               <View style={{padding: 20}}>
                 {filterData?.map(item => (
                   <BookHistoryCard
@@ -65,7 +65,7 @@ export default function Receipt({navigation}) {
                     onPress={() =>
                       navigation.navigate('Invoice', {
                         id: item?._id,
-                        statusOrder: item?.statusOrder,
+                        currentStatus: item?.currentStatus,
                         checkIn: convertDate(item?.checkIn),
                         checkOut: convertDate(item?.checkOut),
                         lengthDay: lengthOfDay(

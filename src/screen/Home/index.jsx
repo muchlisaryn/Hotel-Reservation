@@ -12,6 +12,8 @@ const maxDate = new Date();
 maxDate.setMonth(maxDate.getMonth() + 1);
 
 export default function Home({navigation}) {
+  const maxDate = new Date();
+  maxDate.setMonth(maxDate.getMonth() + 1);
   const [input, setInput] = useState('');
   const [inputCheckIn, setInputCheckIn] = useState(null);
   const [inputCheckOut, setInputCheckOut] = useState(null);
