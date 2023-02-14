@@ -42,7 +42,7 @@ export default function DataDiri({route, navigation}) {
       </View>
       <ScrollView>
         <View style={styles.content}>
-          <View style={{marginTop: 50}}>
+          <View>
             <Text style={styles.headerInput}>Username</Text>
             <Input
               type="user"
@@ -81,11 +81,11 @@ export default function DataDiri({route, navigation}) {
 
             <Text style={styles.headerInput}>Telephone</Text>
             <Input
-              type="user"
-              placeholder="Masukan First Name Anda..."
+              type="telephone"
+              placeholder="Masukan Nomor Handphone..."
               onChangeText={value => setTelephone(value)}
             />
-            <Text
+            {/* <Text
               style={{
                 marginTop: 10,
                 fontSize: 10,
@@ -140,7 +140,7 @@ export default function DataDiri({route, navigation}) {
                   />
                 </View>
               </View>
-            </View>
+            </View> */}
 
             <Gap height={20} />
             <Button title="Continue" color={colors.yellow} onPress={nextPage} />
@@ -170,11 +170,12 @@ const styles = StyleSheet.create({
   page: {
     backgroundColor: colors.darkBlue,
     flex: 1,
+    justifyContent: 'center',
     padding: 20,
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
+    marginTop: 100,
   },
   bank: {
     width: 50,

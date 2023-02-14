@@ -10,6 +10,7 @@ import {UploadPhoto} from '../../assets/img';
 import {useDispatch, useSelector} from 'react-redux';
 
 import axios from 'axios';
+import CountDown from 'react-native-countdown-component';
 
 export default function Payment({route, navigation}) {
   const {
@@ -88,6 +89,13 @@ export default function Payment({route, navigation}) {
     });
   };
 
+  const timeOut = () => {
+    navigation.replace('main', {
+      initial: false,
+    });
+    alert('waktu pembayaran sudah habis silahkan ulangi pemesanan');
+  };
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_URL_SERVER}/cms/rekening`)
@@ -144,9 +152,19 @@ export default function Payment({route, navigation}) {
             ) : (
               <></>
             )}
-            <Text style={{fontWeight: 'normal', color: colors.black}}>
-              Transfer Manual
-            </Text>
+            <View>
+              <Text style={{textAlign: 'right'}}>
+                a/n {nomorRekening?.pemilik}
+              </Text>
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  color: colors.darkGrey,
+                  textAlign: 'right',
+                }}>
+                {nomorRekening?.nomor}
+              </Text>
+            </View>
           </View>
 
           <View
@@ -160,56 +178,21 @@ export default function Payment({route, navigation}) {
             <Text style={styles.price}>{formatIDR.format(price)}</Text>
           </View>
 
-          <View style={{alignItems: 'center', marginBottom: 20}}>
-            {nomorRekening.bank === 'BCA' ? (
-              <Image
-                source={{
-                  uri: 'https://buatlogoonline.com/wp-content/uploads/2022/10/Logo-Bank-BCA-1.png',
-                }}
-                style={{width: 50, height: 50}}
-              />
-            ) : (
-              <></>
-            )}
-            {nomorRekening.bank === 'BRI' ? (
-              <Image
-                source={{
-                  uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/BRI_2020.svg/1200px-BRI_2020.svg.png',
-                }}
-                style={{width: 50, height: 50}}
-              />
-            ) : (
-              <></>
-            )}
-            {nomorRekening.bank === 'BNI' ? (
-              <Image
-                source={{
-                  uri: 'https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/1200px-BNI_logo.svg.png',
-                }}
-                resizeMode={'center'}
-                style={{width: '30%', height: 50}}
-              />
-            ) : (
-              <></>
-            )}
-            <View style={{alignItems: 'center'}}>
-              <Text>a/n {nomorRekening?.pemilik}</Text>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  color: colors.darkGrey,
-                }}>
-                {nomorRekening?.nomor}
-              </Text>
-            </View>
-          </View>
-
-          <View style={{marginBottom: 5}}>
-            <Text style={{textAlign: 'center'}}>
-              transfer menggunakan nomor rekening yang anda daftarkan, untuk
-              memudahkan verifikasi
+          <View style={{marginVertical: 10}}>
+            <Text style={{textAlign: 'center', marginBottom: 10}}>
+              ayo bayar sebelum waktumu habis!!
             </Text>
+            <CountDown
+              size={15}
+              until={1000}
+              onFinish={timeOut}
+              timeToShow={['H', 'M', 'S']}
+              digitStyle={{
+                backgroundColor: colors.red,
+              }}
+              timeLabelStyle={{color: 'red', fontWeight: 'bold'}}
+              digitTxtStyle={{color: colors.white}}
+            />
           </View>
 
           <View style={{alignItems: 'center'}}>

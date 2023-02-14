@@ -21,7 +21,7 @@ export default function Receipt({navigation}) {
   const order = useSelector(state => state.allOrder.allOrder);
   const filterData = order.filter(item => item?.customer?._id === user?.id);
 
-  console.log('ini ORder', user);
+  console.log('ini Order', user);
 
   useEffect(() => {
     dispatch(fetchOrder());

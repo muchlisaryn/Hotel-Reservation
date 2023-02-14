@@ -7,6 +7,7 @@ import {useState, useEffect} from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import InputModal from './parts/InputModal';
 import {formatDate} from '../../utils/formatDate';
+import Artikel from './parts/Artikel';
 
 const maxDate = new Date();
 maxDate.setMonth(maxDate.getMonth() + 1);
@@ -198,6 +199,9 @@ export default function Home({navigation}) {
         </View>
         <View style={{marginLeft: 20}}>
           <Destination title="Top Destinations" data={DataTop} />
+          <View>
+            <Artikel />
+          </View>
           <Destination title="Popular Destinations" data={DataPopular} />
         </View>
       </ScrollView>
